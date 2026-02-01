@@ -39,7 +39,7 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-navy"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-navy pt-20"
     >
       {/* Gradient background layers */}
       <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy-light/50 to-navy" />
@@ -87,33 +87,35 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6 text-white"
+            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-4 text-white"
           >
             <motion.span
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-            >
-              Your Trusted Partner for
-            </motion.span>
-            <br />
-            <motion.span
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
               className="relative inline-block"
             >
               <span className="gradient-text bg-gradient-to-r from-coral via-pink-400 to-violet-400 bg-clip-text text-transparent">
-                Digital Solutions
+                Creativity Meets Intelligence
               </span>
               <motion.span
                 className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-coral to-violet-400 rounded-full"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
               />
             </motion.span>
           </motion.h1>
+
+          {/* Subheading */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="font-display text-xl sm:text-2xl md:text-3xl font-medium text-white/80 mb-6"
+          >
+            Designing intelligent software for the future.
+          </motion.h2>
 
           {/* Description */}
           <motion.p
