@@ -1,48 +1,50 @@
 import { motion } from "framer-motion";
 
-const clients = [
-  "Acme Corp",
-  "TechFlow",
-  "Innovate Inc",
-  "DataDrive",
-  "CloudBase",
-  "NextGen",
-  "SmartSys",
-  "CoreLogic",
+const technologies = [
+  "React", "Node.js", "TypeScript", "Python", "AWS", "Azure", 
+  "Docker", "Kubernetes", "PostgreSQL", "MongoDB", "TensorFlow", "Next.js",
+  "GraphQL", "Redis", "Firebase", "Figma"
 ];
 
 export function TechStackCarousel() {
-  return (
-    <section className="py-16 border-y border-border/50">
-      <div className="container mx-auto px-4 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
-          <p className="text-muted-foreground text-sm">
-            Trusted by teams who value quality and collaboration
-          </p>
-        </motion.div>
+  // Double the array for seamless loop
+  const doubledTech = [...technologies, ...technologies];
 
+  return (
+    <section className="py-12 bg-secondary/50 overflow-hidden">
+      <div className="container mx-auto px-4 lg:px-8 mb-6">
+        <p className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+          Technologies We Work With
+        </p>
+      </div>
+      
+      <div className="relative">
+        {/* Gradient overlays */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-secondary/50 to-transparent z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-secondary/50 to-transparent z-10" />
+        
+        {/* Scrolling container */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center items-center gap-8 md:gap-12"
+          className="flex gap-12 py-4"
+          animate={{ x: [0, "-50%"] }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 30,
+              ease: "linear",
+            },
+          }}
         >
-          {clients.map((client, index) => (
-            <motion.div
-              key={client}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="text-muted-foreground/60 font-semibold text-lg hover:text-foreground transition-colors cursor-default"
+          {doubledTech.map((tech, index) => (
+            <div
+              key={`${tech}-${index}`}
+              className="flex-shrink-0 px-6 py-3 rounded-full bg-background border border-border"
             >
-              {client}
-            </motion.div>
+              <span className="font-semibold text-foreground whitespace-nowrap">
+                {tech}
+              </span>
+            </div>
           ))}
         </motion.div>
       </div>

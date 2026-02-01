@@ -101,9 +101,9 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             className="max-w-2xl"
           >
-            <p className="text-primary font-medium mb-3">Contact us</p>
-            <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-6 text-foreground">
-              Let's start a conversation
+            <p className="text-coral font-semibold mb-3">Contact us</p>
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
+              Let's start a <span className="gradient-text">conversation</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Whether you have a project in mind or just want to explore ideas, 
@@ -125,20 +125,20 @@ const Contact = () => {
               transition={{ duration: 0.5 }}
               className="lg:col-span-2"
             >
-              <h2 className="font-serif text-2xl font-semibold mb-8 text-foreground">Get in touch</h2>
+              <h2 className="font-display text-2xl font-bold mb-8 text-foreground">Get in touch</h2>
 
-              <div className="space-y-6 mb-12">
+              <div className="space-y-4 mb-12">
                 {contactInfo.map((info) => (
                   <a
                     key={info.label}
                     href={info.href}
-                    className="flex items-start gap-4 p-4 rounded-xl hover:bg-muted transition-colors group"
+                    className="flex items-start gap-4 p-4 rounded-xl hover:bg-secondary transition-colors group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                      <info.icon className="w-5 h-5 text-primary" />
+                    <div className="icon-ring flex-shrink-0 group-hover:border-coral/50 transition-colors">
+                      <info.icon className="w-5 h-5 text-coral" />
                     </div>
                     <div>
-                      <p className="font-medium text-foreground">{info.value}</p>
+                      <p className="font-semibold text-foreground">{info.value}</p>
                       <p className="text-sm text-muted-foreground">{info.description}</p>
                     </div>
                   </a>
@@ -163,13 +163,13 @@ const Contact = () => {
               transition={{ duration: 0.5 }}
               className="lg:col-span-3"
             >
-              <div className="warm-card p-8 md:p-10">
+              <div className="modern-card p-8 md:p-10">
                 <div className="flex items-center gap-3 mb-8">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 text-primary" />
+                  <div className="icon-ring">
+                    <MessageCircle className="w-5 h-5 text-coral" />
                   </div>
                   <div>
-                    <h2 className="font-semibold text-foreground">Send us a message</h2>
+                    <h2 className="font-display font-bold text-foreground">Send us a message</h2>
                     <p className="text-sm text-muted-foreground">We typically respond within a few hours</p>
                   </div>
                 </div>
@@ -180,10 +180,10 @@ const Contact = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center py-12"
                   >
-                    <div className="w-16 h-16 rounded-full bg-warm-sage/20 flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="w-8 h-8 text-warm-sage" />
+                    <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-8 h-8 text-green-500" />
                     </div>
-                    <h3 className="font-serif text-2xl font-semibold mb-2 text-foreground">Thank you!</h3>
+                    <h3 className="font-display text-2xl font-bold mb-2 text-foreground">Thank you!</h3>
                     <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
                       We've received your message and will get back to you within 24 hours.
                     </p>
@@ -260,7 +260,7 @@ const Contact = () => {
                         type="submit"
                         disabled={isSubmitting}
                         size="lg"
-                        className="w-full rounded-full"
+                        className="w-full rounded-full btn-gradient border-0 text-white"
                       >
                         {isSubmitting ? (
                           "Sending..."

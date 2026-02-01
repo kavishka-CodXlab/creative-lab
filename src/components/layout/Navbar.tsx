@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/projects", label: "Work" },
+  { href: "/projects", label: "Portfolio" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -21,17 +21,18 @@ export function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border"
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center group-hover:scale-105 transition-transform">
-              <span className="font-serif font-bold text-xl text-primary-foreground">C</span>
+            <div className="w-10 h-10 rounded-full border-2 border-coral flex items-center justify-center group-hover:bg-coral/10 transition-colors">
+              <span className="font-display font-bold text-lg text-coral">C</span>
             </div>
             <div className="hidden sm:block">
-              <span className="font-serif text-xl font-semibold text-foreground">Creative Lab</span>
+              <span className="font-display text-xl font-bold text-foreground">Creative</span>
+              <span className="font-display text-xl font-bold text-coral">Lab</span>
             </div>
           </Link>
 
@@ -43,17 +44,11 @@ export function Navbar() {
                 to={link.href}
                 className={`text-sm font-medium transition-colors relative py-2 ${
                   location.pathname === link.href
-                    ? "text-primary"
+                    ? "text-coral"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {link.label}
-                {location.pathname === link.href && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
-                  />
-                )}
               </Link>
             ))}
           </div>
@@ -61,8 +56,8 @@ export function Navbar() {
           {/* CTA Button */}
           <div className="hidden md:flex items-center gap-4">
             <Link to="/contact">
-              <Button className="rounded-full px-6 font-medium">
-                Let's Talk
+              <Button className="rounded-full px-6 font-semibold btn-gradient border-0 text-white hover:opacity-90">
+                Schedule a Call
               </Button>
             </Link>
           </div>
@@ -94,7 +89,7 @@ export function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                     location.pathname === link.href
-                      ? "text-primary bg-primary/5"
+                      ? "text-coral bg-coral/5"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}
                 >
@@ -102,8 +97,8 @@ export function Navbar() {
                 </Link>
               ))}
               <Link to="/contact" onClick={() => setIsOpen(false)} className="mt-2">
-                <Button className="w-full rounded-full font-medium">
-                  Let's Talk
+                <Button className="w-full rounded-full font-semibold btn-gradient border-0 text-white">
+                  Schedule a Call
                 </Button>
               </Link>
             </div>
