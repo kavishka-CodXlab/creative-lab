@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Sparkles, User, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,7 @@ export function AIChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm the Creative Lab AI assistant. How can I help you today? Ask me about our services, projects, or how we can help with your next project!",
+      content: "Hi there! 👋 I'm here to help answer any questions about Creative Lab. What can I help you with today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -44,12 +44,12 @@ export function AIChatbot() {
 
     if (!resp.ok) {
       if (resp.status === 429) {
-        throw new Error("Rate limit exceeded. Please try again in a moment.");
+        throw new Error("I'm a bit busy right now. Please try again in a moment!");
       }
       if (resp.status === 402) {
-        throw new Error("AI usage limit reached. Please try again later.");
+        throw new Error("I've reached my chat limit for now. Please try again later!");
       }
-      throw new Error("Failed to connect to AI assistant.");
+      throw new Error("Something went wrong. Let me try again.");
     }
 
     if (!resp.body) throw new Error("No response body");
@@ -131,21 +131,11 @@ export function AIChatbot() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-neon-blue via-neon-purple to-neon-cyan text-primary-foreground shadow-lg glow-blue ${
+        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg ${
           isOpen ? "hidden" : "flex"
-        } items-center justify-center`}
-        whileHover={{ scale: 1.1 }}
+        } items-center justify-center hover:scale-105 transition-transform`}
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        animate={{ 
-          boxShadow: [
-            "0 0 20px hsl(191 100% 50% / 0.3)",
-            "0 0 40px hsl(191 100% 50% / 0.5)",
-            "0 0 20px hsl(191 100% 50% / 0.3)",
-          ]
-        }}
-        transition={{ 
-          boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-        }}
       >
         <MessageCircle className="w-6 h-6" />
       </motion.button>
@@ -158,24 +148,24 @@ export function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] glass-card rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border/50">
+            <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-neon-blue to-neon-purple flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-primary-foreground" />
+                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <div>
-                  <h3 className="font-display font-semibold">AI Assistant</h3>
-                  <p className="text-xs text-muted-foreground">Powered by Creative Lab</p>
+                  <h3 className="font-semibold text-foreground">Chat with us</h3>
+                  <p className="text-xs text-muted-foreground">We typically reply instantly</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                className="p-2 rounded-lg hover:bg-muted transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
 
@@ -189,19 +179,19 @@ export function AIChatbot() {
                   className={`flex gap-3 ${message.role === "user" ? "justify-end" : ""}`}
                 >
                   {message.role === "assistant" && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-neon-blue to-neon-purple flex items-center justify-center flex-shrink-0">
-                      <Bot className="w-4 h-4 text-primary-foreground" />
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-4 h-4 text-primary-foreground" />
                     </div>
                   )}
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                       message.role === "user"
                         ? "bg-primary text-primary-foreground"
-                        : "bg-muted/50"
+                        : "bg-muted"
                     }`}
                   >
                     {message.role === "assistant" ? (
-                      <div className="prose prose-sm prose-invert max-w-none">
+                      <div className="prose prose-sm max-w-none text-foreground">
                         <ReactMarkdown>{message.content}</ReactMarkdown>
                       </div>
                     ) : (
@@ -210,18 +200,18 @@ export function AIChatbot() {
                   </div>
                   {message.role === "user" && (
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4" />
+                      <User className="w-4 h-4 text-muted-foreground" />
                     </div>
                   )}
                 </motion.div>
               ))}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-neon-blue to-neon-purple flex items-center justify-center">
-                    <Bot className="w-4 h-4 text-primary-foreground" />
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-primary-foreground" />
                   </div>
-                  <div className="bg-muted/50 rounded-2xl px-4 py-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                  <div className="bg-muted rounded-2xl px-4 py-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
                   </div>
                 </div>
               )}
@@ -229,20 +219,20 @@ export function AIChatbot() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-border/50">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-border bg-muted/30">
               <div className="flex gap-2">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask me anything..."
+                  placeholder="Type your message..."
                   disabled={isLoading}
-                  className="flex-1 bg-muted/50"
+                  className="flex-1 rounded-full bg-background"
                 />
                 <Button
                   type="submit"
                   size="icon"
                   disabled={isLoading || !input.trim()}
-                  className="bg-gradient-to-r from-neon-blue to-neon-purple text-primary-foreground"
+                  className="rounded-full"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
