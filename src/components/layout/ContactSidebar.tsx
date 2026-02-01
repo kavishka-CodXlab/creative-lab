@@ -20,22 +20,22 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      staggerChildren: 0.12,
+      delayChildren: 0.15,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.9 },
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
       type: "spring",
-      stiffness: 100,
-      damping: 12,
+      stiffness: 120,
+      damping: 14,
     },
   },
 };
@@ -45,18 +45,17 @@ const socialContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.6,
+      staggerChildren: 0.08,
+      delayChildren: 0.4,
     },
   },
 };
 
 const socialItemVariants = {
-  hidden: { opacity: 0, scale: 0, rotate: -180 },
+  hidden: { opacity: 0, scale: 0 },
   visible: {
     opacity: 1,
     scale: 1,
-    rotate: 0,
     transition: {
       type: "spring",
       stiffness: 200,
@@ -105,107 +104,91 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
           </Button>
         )}
       </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:max-w-md bg-background border-l border-border p-0 overflow-hidden">
+      <SheetContent side="right" className="w-[320px] sm:w-[380px] bg-background border-l border-border p-0 overflow-y-auto">
         <SheetHeader className="sr-only">
           <SheetTitle>Contact Information</SheetTitle>
         </SheetHeader>
         
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-col h-full py-12 px-8"
-            >
-              {/* Contact Info Cards */}
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="flex-1 flex flex-col justify-center space-y-0"
-              >
-                {contactInfo.map((item, index) => (
-                  <motion.div key={item.title} variants={itemVariants}>
-                    <motion.a
-                      href={item.href}
-                      className="group block py-8 text-center transition-colors"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <motion.div 
-                        className="w-20 h-20 mx-auto mb-4 rounded-full border-2 border-navy/20 flex items-center justify-center group-hover:border-coral group-hover:bg-coral/5 transition-all"
-                        whileHover={{ 
-                          rotate: [0, -10, 10, -10, 0],
-                          transition: { duration: 0.5 }
-                        }}
-                      >
-                        <item.icon className="w-8 h-8 text-navy group-hover:text-coral transition-colors" />
-                      </motion.div>
-                      <h3 className="font-display text-xl font-semibold text-foreground mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-muted-foreground group-hover:text-coral transition-colors">
-                        {item.value}
-                      </p>
-                    </motion.a>
-                    {index < contactInfo.length - 1 && (
-                      <motion.div
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ delay: 0.3 + index * 0.15, duration: 0.4 }}
-                      >
-                        <Separator className="my-0" />
-                      </motion.div>
-                    )}
+        <div className="flex flex-col h-full py-8 px-6">
+          {/* Contact Info Cards */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={isOpen ? "visible" : "hidden"}
+            className="flex-1 flex flex-col justify-center space-y-0"
+          >
+            {contactInfo.map((item, index) => (
+              <motion.div key={item.title} variants={itemVariants}>
+                <motion.a
+                  href={item.href}
+                  className="group block py-6 text-center transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.div 
+                    className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-navy/20 flex items-center justify-center group-hover:border-coral group-hover:bg-coral/5 transition-all"
+                    whileHover={{ 
+                      rotate: [0, -5, 5, -5, 0],
+                      transition: { duration: 0.4 }
+                    }}
+                  >
+                    <item.icon className="w-6 h-6 text-navy group-hover:text-coral transition-colors" />
                   </motion.div>
-                ))}
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground group-hover:text-coral transition-colors">
+                    {item.value}
+                  </p>
+                </motion.a>
+                {index < contactInfo.length - 1 && (
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: isOpen ? 1 : 0 }}
+                    transition={{ delay: 0.2 + index * 0.1, duration: 0.3 }}
+                  >
+                    <Separator className="my-0" />
+                  </motion.div>
+                )}
               </motion.div>
+            ))}
+          </motion.div>
 
-              {/* Social Links */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.4 }}
-                className="pt-8 border-t border-border"
-              >
-                <motion.h4 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.55 }}
-                  className="font-display text-lg font-semibold text-center mb-6"
+          {/* Social Links */}
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 15 }}
+            transition={{ delay: 0.35, duration: 0.3 }}
+            className="pt-6 border-t border-border"
+          >
+            <h4 className="font-display text-base font-semibold text-center mb-4">
+              Stay Connected
+            </h4>
+            <motion.div 
+              variants={socialContainerVariants}
+              initial="hidden"
+              animate={isOpen ? "visible" : "hidden"}
+              className="flex justify-center gap-3"
+            >
+              {socialLinks.map((social) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  variants={socialItemVariants}
+                  whileHover={{ 
+                    scale: 1.1,
+                    transition: { duration: 0.2 }
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                  className="w-10 h-10 rounded-full border-2 border-coral/30 flex items-center justify-center text-coral hover:border-coral hover:bg-coral hover:text-white transition-all"
                 >
-                  Stay Connected
-                </motion.h4>
-                <motion.div 
-                  variants={socialContainerVariants}
-                  initial="hidden"
-                  animate="visible"
-                  className="flex justify-center gap-4"
-                >
-                  {socialLinks.map((social) => (
-                    <motion.a
-                      key={social.label}
-                      href={social.href}
-                      aria-label={social.label}
-                      variants={socialItemVariants}
-                      whileHover={{ 
-                        scale: 1.15,
-                        rotate: 360,
-                        transition: { duration: 0.3 }
-                      }}
-                      whileTap={{ scale: 0.9 }}
-                      className="w-12 h-12 rounded-full border-2 border-navy/20 flex items-center justify-center hover:border-coral hover:bg-coral hover:text-white transition-all"
-                    >
-                      <social.icon className="w-5 h-5" />
-                    </motion.a>
-                  ))}
-                </motion.div>
-              </motion.div>
+                  <social.icon className="w-4 h-4" />
+                </motion.a>
+              ))}
             </motion.div>
-          )}
-        </AnimatePresence>
+          </motion.div>
+        </div>
       </SheetContent>
     </Sheet>
   );
