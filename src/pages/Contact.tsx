@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, CheckCircle, MessageCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,10 +13,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  message: z.string().min(20, "Message must be at least 20 characters"),
+  name: z.string().min(2, "Please enter your name"),
+  email: z.string().email("Please enter a valid email"),
+  subject: z.string().min(5, "Please enter a subject"),
+  message: z.string().min(20, "Please tell us a bit more about your project"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -24,20 +24,23 @@ type FormValues = z.infer<typeof formSchema>;
 const contactInfo = [
   {
     icon: Mail,
-    label: "Email",
+    label: "Email us",
     value: "hello@creativelab.com",
+    description: "We'll respond within 24 hours",
     href: "mailto:hello@creativelab.com",
   },
   {
     icon: Phone,
-    label: "Phone",
+    label: "Call us",
     value: "+1 (555) 123-4567",
+    description: "Mon-Fri, 9am-6pm EST",
     href: "tel:+15551234567",
   },
   {
     icon: MapPin,
-    label: "Office",
+    label: "Visit us",
     value: "San Francisco, CA",
+    description: "By appointment only",
     href: "#",
   },
 ];
@@ -72,14 +75,14 @@ const Contact = () => {
       setIsSuccess(true);
       form.reset();
       toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
+        title: "Message sent! 🎉",
+        description: "We'll get back to you soon.",
       });
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "Something went wrong",
+        description: "Please try again or email us directly.",
         variant: "destructive",
       });
     } finally {
@@ -90,93 +93,102 @@ const Contact = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/5 via-neon-purple/5 to-neon-cyan/5" />
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+      <section className="py-24 pt-32">
+        <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
+            className="max-w-2xl"
           >
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Get in <span className="gradient-text">Touch</span>
+            <p className="text-primary font-medium mb-3">Contact us</p>
+            <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-6 text-foreground">
+              Let's start a conversation
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Have a project in mind? Let's discuss how we can help bring your vision to life.
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Whether you have a project in mind or just want to explore ideas, 
+              we'd love to hear from you. No pressure, no hard sell — just a friendly chat.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-16">
+      <section className="pb-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-5 gap-16">
             {/* Contact Info */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="lg:col-span-2"
             >
-              <h2 className="font-display text-2xl font-bold mb-6">Contact Information</h2>
-              <p className="text-muted-foreground mb-8">
-                Reach out to us through any of the following channels. Our team is ready 
-                to answer your questions and discuss your project needs.
-              </p>
+              <h2 className="font-serif text-2xl font-semibold mb-8 text-foreground">Get in touch</h2>
 
-              <div className="space-y-6">
+              <div className="space-y-6 mb-12">
                 {contactInfo.map((info) => (
                   <a
                     key={info.label}
                     href={info.href}
-                    className="flex items-center gap-4 p-4 glass-card rounded-xl hover:border-primary/30 transition-all group"
+                    className="flex items-start gap-4 p-4 rounded-xl hover:bg-muted transition-colors group"
                   >
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
                       <info.icon className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{info.label}</p>
-                      <p className="font-medium">{info.value}</p>
+                      <p className="font-medium text-foreground">{info.value}</p>
+                      <p className="text-sm text-muted-foreground">{info.description}</p>
                     </div>
                   </a>
                 ))}
               </div>
 
-              {/* Map placeholder */}
-              <div className="mt-8 aspect-video rounded-xl glass-card overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-neon-blue/10 via-neon-purple/10 to-neon-cyan/10 flex items-center justify-center">
-                  <MapPin className="w-16 h-16 text-muted-foreground/30" />
-                </div>
+              {/* Image */}
+              <div className="rounded-2xl overflow-hidden hidden lg:block">
+                <img
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop"
+                  alt="Our office"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
 
             {/* Contact Form */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="lg:col-span-3"
             >
-              <div className="glass-card rounded-xl p-8">
-                <h2 className="font-display text-2xl font-bold mb-6">Send us a Message</h2>
+              <div className="warm-card p-8 md:p-10">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <MessageCircle className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-foreground">Send us a message</h2>
+                    <p className="text-sm text-muted-foreground">We typically respond within a few hours</p>
+                  </div>
+                </div>
 
                 {isSuccess ? (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-center py-12"
                   >
-                    <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle className="w-8 h-8 text-green-500" />
+                    <div className="w-16 h-16 rounded-full bg-warm-sage/20 flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-8 h-8 text-warm-sage" />
                     </div>
-                    <h3 className="font-display text-xl font-bold mb-2">Message Sent!</h3>
-                    <p className="text-muted-foreground mb-6">
-                      Thank you for reaching out. We'll get back to you within 24 hours.
+                    <h3 className="font-serif text-2xl font-semibold mb-2 text-foreground">Thank you!</h3>
+                    <p className="text-muted-foreground mb-6 max-w-sm mx-auto">
+                      We've received your message and will get back to you within 24 hours.
                     </p>
-                    <Button onClick={() => setIsSuccess(false)} variant="outline">
-                      Send Another Message
+                    <Button onClick={() => setIsSuccess(false)} variant="outline" className="rounded-full">
+                      Send another message
                     </Button>
                   </motion.div>
                 ) : (
@@ -188,9 +200,9 @@ const Contact = () => {
                           name="name"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Name</FormLabel>
+                              <FormLabel>Your name</FormLabel>
                               <FormControl>
-                                <Input placeholder="John Doe" {...field} className="bg-muted/50" />
+                                <Input placeholder="John Doe" {...field} className="rounded-lg" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -201,9 +213,9 @@ const Contact = () => {
                           name="email"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Email</FormLabel>
+                              <FormLabel>Email address</FormLabel>
                               <FormControl>
-                                <Input placeholder="john@example.com" type="email" {...field} className="bg-muted/50" />
+                                <Input placeholder="john@example.com" type="email" {...field} className="rounded-lg" />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -218,7 +230,7 @@ const Contact = () => {
                           <FormItem>
                             <FormLabel>Subject</FormLabel>
                             <FormControl>
-                              <Input placeholder="Project Inquiry" {...field} className="bg-muted/50" />
+                              <Input placeholder="What's this about?" {...field} className="rounded-lg" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -230,13 +242,13 @@ const Contact = () => {
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Message</FormLabel>
+                            <FormLabel>Your message</FormLabel>
                             <FormControl>
                               <Textarea
-                                placeholder="Tell us about your project..."
-                                rows={5}
+                                placeholder="Tell us about your project, your challenges, or what you're hoping to achieve..."
+                                rows={6}
                                 {...field}
-                                className="bg-muted/50 resize-none"
+                                className="rounded-lg resize-none"
                               />
                             </FormControl>
                             <FormMessage />
@@ -247,13 +259,14 @@ const Contact = () => {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-gradient-to-r from-neon-blue via-neon-purple to-neon-cyan text-primary-foreground font-medium"
+                        size="lg"
+                        className="w-full rounded-full"
                       >
                         {isSubmitting ? (
                           "Sending..."
                         ) : (
                           <>
-                            Send Message
+                            Send message
                             <Send className="w-4 h-4 ml-2" />
                           </>
                         )}

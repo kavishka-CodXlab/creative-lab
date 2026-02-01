@@ -1,176 +1,198 @@
 import { motion } from "framer-motion";
-import { Code2, Brain, FlaskConical, Cog, BarChart3, Check } from "lucide-react";
+import { Code2, Brain, FlaskConical, Cog, BarChart3, Check, ArrowRight } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const services = [
   {
     id: "software",
     icon: Code2,
     title: "Software Development",
-    description: "Custom software solutions built with modern technologies and best practices to drive your business forward.",
+    description: "We craft custom software that fits your business like a glove — intuitive, scalable, and built to last.",
     features: [
       "Full-stack web applications",
       "Mobile app development",
       "API development & integration",
       "Cloud-native solutions",
       "Legacy system modernization",
-      "Performance optimization",
+      "Ongoing support & maintenance",
     ],
-    gradient: "from-neon-blue to-neon-purple",
+    color: "bg-primary/10 text-primary",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop",
   },
   {
     id: "ai",
     icon: Brain,
-    title: "AI Solutions & Design",
-    description: "Intelligent systems powered by machine learning and neural networks to automate and enhance your operations.",
+    title: "AI Solutions",
+    description: "Intelligent systems that augment human capabilities — making your team smarter, not replacing them.",
     features: [
       "Machine learning models",
       "Natural language processing",
-      "Computer vision systems",
       "Predictive analytics",
-      "AI-powered automation",
-      "Recommendation engines",
+      "Process automation",
+      "AI strategy consulting",
+      "Ethical AI practices",
     ],
-    gradient: "from-neon-purple to-neon-cyan",
+    color: "bg-warm-coral/10 text-warm-coral",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&h=400&fit=crop",
   },
   {
     id: "research",
     icon: FlaskConical,
     title: "Research & Development",
-    description: "Pioneering research to push the boundaries of what's possible and keep you ahead of the competition.",
+    description: "We explore what's next, turning emerging technologies into practical solutions for today's challenges.",
     features: [
       "Technology feasibility studies",
       "Prototype development",
-      "Innovation consulting",
+      "Innovation workshops",
+      "Proof of concept builds",
+      "Technology roadmapping",
       "Patent research",
-      "Emerging tech exploration",
-      "Academic partnerships",
     ],
-    gradient: "from-neon-cyan to-neon-blue",
+    color: "bg-warm-sage/10 text-warm-sage",
+    image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=600&h=400&fit=crop",
   },
   {
     id: "product",
     icon: Cog,
     title: "Product Engineering",
-    description: "End-to-end product development from concept to market launch with agile methodologies.",
+    description: "From napkin sketch to market launch — we bring your product vision to life with care and precision.",
     features: [
-      "Product strategy & roadmap",
+      "Product discovery & strategy",
       "UX/UI design",
       "Agile development",
       "Quality assurance",
       "DevOps & CI/CD",
-      "Post-launch support",
+      "Launch & growth support",
     ],
-    gradient: "from-neon-blue via-neon-purple to-neon-cyan",
+    color: "bg-warm-amber/10 text-warm-amber",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop",
   },
   {
     id: "bi",
     icon: BarChart3,
     title: "Business Intelligence",
-    description: "Data-driven insights to transform your business decisions and unlock hidden opportunities.",
+    description: "Turn your data into stories that drive decisions — dashboards and insights that actually get used.",
     features: [
-      "Data warehousing",
+      "Data strategy consulting",
       "Dashboard development",
-      "ETL pipelines",
+      "Report automation",
       "Real-time analytics",
-      "KPI tracking",
       "Data visualization",
+      "Training & enablement",
     ],
-    gradient: "from-neon-purple to-neon-blue",
+    color: "bg-primary/10 text-primary",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop",
   },
 ];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
-  },
-};
 
 const Services = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/5 via-neon-purple/5 to-neon-cyan/5" />
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+      <section className="py-24 pt-32">
+        <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
+            className="max-w-2xl"
           >
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Our <span className="gradient-text">Services</span>
+            <p className="text-primary font-medium mb-3">Our services</p>
+            <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-6 text-foreground">
+              How we can help you
             </h1>
-            <p className="text-lg text-muted-foreground">
-              We offer comprehensive technology services designed to help businesses 
-              innovate, scale, and succeed in the digital age.
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              We offer a range of services designed to meet you where you are 
+              and help you get where you want to go. No cookie-cutter solutions — 
+              just thoughtful work tailored to your needs.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Services List */}
-      <section className="py-16">
+      <section className="pb-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="space-y-16"
-          >
+          <div className="space-y-24">
             {services.map((service, index) => (
               <motion.div
                 key={service.id}
                 id={service.id}
-                variants={itemVariants}
-                className={`grid md:grid-cols-2 gap-8 lg:gap-16 items-center ${
-                  index % 2 === 1 ? "md:flex-row-reverse" : ""
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className={`grid lg:grid-cols-2 gap-12 items-center ${
+                  index % 2 === 1 ? "lg:flex-row-reverse" : ""
                 }`}
               >
-                <div className={index % 2 === 1 ? "md:order-2" : ""}>
-                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} p-[2px] mb-6`}>
-                    <div className="w-full h-full rounded-2xl bg-card flex items-center justify-center">
-                      <service.icon className="w-8 h-8 text-primary" />
-                    </div>
+                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                  <div className={`w-14 h-14 rounded-xl ${service.color} flex items-center justify-center mb-6`}>
+                    <service.icon className="w-7 h-7" />
                   </div>
-                  <h2 className="font-display text-2xl md:text-3xl font-bold mb-4">
+                  <h2 className="font-serif text-2xl md:text-3xl font-semibold mb-4 text-foreground">
                     {service.title}
                   </h2>
-                  <p className="text-muted-foreground mb-6">
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
                     {service.description}
                   </p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                     {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2 text-sm">
-                        <Check className="w-4 h-4 text-primary flex-shrink-0" />
-                        <span>{feature}</span>
+                      <li key={feature} className="flex items-center gap-3 text-sm">
+                        <div className="w-5 h-5 rounded-full bg-warm-sage/20 flex items-center justify-center flex-shrink-0">
+                          <Check className="w-3 h-3 text-warm-sage" />
+                        </div>
+                        <span className="text-foreground">{feature}</span>
                       </li>
                     ))}
                   </ul>
+                  <Link to="/contact">
+                    <Button className="rounded-full" variant="outline">
+                      Discuss your project
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
                 </div>
 
-                <div className={`${index % 2 === 1 ? "md:order-1" : ""}`}>
-                  <div className={`aspect-square rounded-2xl bg-gradient-to-br ${service.gradient} p-[2px]`}>
-                    <div className="w-full h-full rounded-2xl glass-card flex items-center justify-center">
-                      <service.icon className="w-32 h-32 text-primary/20" />
-                    </div>
+                <div className={index % 2 === 1 ? "lg:order-1" : ""}>
+                  <div className="rounded-2xl overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover aspect-[4/3]"
+                    />
                   </div>
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl mx-auto"
+          >
+            <h2 className="font-serif text-3xl font-semibold mb-4 text-foreground">
+              Not sure what you need?
+            </h2>
+            <p className="text-muted-foreground mb-8 leading-relaxed">
+              That's okay! Let's have a conversation about your goals and figure out 
+              the best path forward together. No pressure, no hard sell.
+            </p>
+            <Link to="/contact">
+              <Button size="lg" className="rounded-full px-8">
+                Let's talk
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>

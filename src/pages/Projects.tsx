@@ -1,198 +1,170 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
 
 const projects = [
   {
     id: 1,
-    title: "Neural Commerce",
-    category: "AI Solutions",
-    description: "AI-powered e-commerce platform with personalized recommendations, dynamic pricing, and intelligent inventory management. The system uses deep learning to analyze customer behavior and optimize conversions.",
-    challenge: "The client needed to increase conversion rates and customer engagement on their e-commerce platform while reducing cart abandonment.",
-    solution: "We implemented a neural network-based recommendation engine that analyzes user behavior in real-time, providing personalized product suggestions and dynamic pricing strategies.",
-    results: ["45% increase in conversion rate", "30% reduction in cart abandonment", "2x improvement in customer engagement"],
-    tech: ["Python", "TensorFlow", "React", "AWS", "PostgreSQL"],
-    gradient: "from-neon-blue to-neon-purple",
+    title: "HealthFirst Platform",
+    category: "Healthcare",
+    description: "We partnered with a regional healthcare network to create a patient-centered platform that simplified appointment booking, health tracking, and doctor communication.",
+    challenge: "Patients were frustrated with a fragmented system — multiple apps, confusing interfaces, and no unified view of their health journey.",
+    solution: "We designed and built an intuitive mobile-first platform that brought everything together. The focus was on simplicity and accessibility for users of all ages.",
+    results: ["50,000+ active users", "4.8★ app store rating", "60% reduction in missed appointments"],
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
+    testimonial: {
+      quote: "Creative Lab didn't just build an app — they understood our patients' needs and created something they actually want to use.",
+      author: "Dr. Sarah Chen",
+      role: "Chief Digital Officer",
+    },
   },
   {
     id: 2,
-    title: "CloudSync Pro",
-    category: "Enterprise Software",
-    description: "Real-time data synchronization platform for distributed enterprise systems. Enables seamless data flow across multiple cloud providers and on-premise infrastructure.",
-    challenge: "A Fortune 500 company struggled with data silos across their global operations, leading to delayed decision-making and inconsistent reporting.",
-    solution: "We built a distributed event-driven architecture that synchronizes data in real-time across 50+ systems while maintaining data integrity and compliance.",
-    results: ["99.99% uptime achieved", "50ms average sync latency", "80% reduction in data inconsistencies"],
-    tech: ["Java", ".NET", "Docker", "Kubernetes", "Apache Kafka"],
-    gradient: "from-neon-purple to-neon-cyan",
+    title: "RetailFlow Inventory",
+    category: "Retail & E-commerce",
+    description: "A growing retail chain was struggling with inventory management. We helped them build a system that brought clarity and control to their operations.",
+    challenge: "Stockouts were costing millions, while other products sat unsold. The team was drowning in spreadsheets with no real-time visibility.",
+    solution: "We built an intelligent inventory management system with real-time tracking, predictive restocking, and a dashboard that actually made sense to the team.",
+    results: ["40% reduction in stockouts", "$2M annual savings", "Real-time inventory visibility"],
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
+    testimonial: {
+      quote: "For the first time, our managers can see exactly what's happening across all locations. It's transformed how we operate.",
+      author: "Michael Torres",
+      role: "VP of Operations",
+    },
   },
   {
     id: 3,
-    title: "HealthAI Analytics",
-    category: "Healthcare",
-    description: "Machine learning platform for predictive healthcare analytics and patient outcomes. Helps healthcare providers make data-driven decisions to improve patient care.",
-    challenge: "A healthcare network needed to predict patient readmissions and optimize resource allocation across their facilities.",
-    solution: "We developed a HIPAA-compliant ML platform that analyzes patient data to predict outcomes, identify at-risk patients, and recommend preventive interventions.",
-    results: ["35% reduction in readmissions", "20% improvement in resource utilization", "Saved $2M annually"],
-    tech: ["Python", "PyTorch", "PostgreSQL", "GCP", "FHIR"],
-    gradient: "from-neon-cyan to-neon-blue",
+    title: "EduConnect Learning",
+    category: "Education",
+    description: "We worked with an education nonprofit to bring personalized learning to underserved communities through technology.",
+    challenge: "Students in rural areas lacked access to quality education resources and personalized support.",
+    solution: "We created an adaptive learning platform that works offline, personalizes content to each student's level, and connects them with volunteer tutors.",
+    results: ["10,000+ students reached", "35% improvement in test scores", "Works in low-connectivity areas"],
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
+    testimonial: {
+      quote: "Creative Lab built something that truly makes a difference. They understood our mission and delivered beyond our expectations.",
+      author: "Dr. Amara Obi",
+      role: "Executive Director",
+    },
   },
   {
     id: 4,
-    title: "FinFlow Dashboard",
-    category: "Fintech",
-    description: "Real-time financial analytics dashboard with advanced visualization, automated reporting, and regulatory compliance tracking for financial institutions.",
-    challenge: "A financial services firm needed real-time visibility into their portfolio performance while meeting strict regulatory reporting requirements.",
-    solution: "We created an interactive dashboard that processes millions of transactions in real-time, generating automated reports and compliance documentation.",
-    results: ["90% reduction in reporting time", "Real-time risk monitoring", "100% regulatory compliance"],
-    tech: ["React", "Node.js", "MongoDB", "D3.js", "Redis"],
-    gradient: "from-neon-blue via-neon-purple to-neon-cyan",
+    title: "FinFlow Analytics",
+    category: "Financial Services",
+    description: "A financial services firm needed real-time visibility into their portfolio performance and regulatory compliance.",
+    challenge: "Reports took days to generate, compliance was manual, and leadership couldn't get timely insights for decision-making.",
+    solution: "We built a real-time analytics dashboard that processes transactions instantly, automates compliance reporting, and surfaces the insights that matter.",
+    results: ["90% faster reporting", "100% audit compliance", "Real-time risk monitoring"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+    testimonial: {
+      quote: "What used to take our team days now happens automatically. The dashboard has become essential to how we operate.",
+      author: "Jennifer Park",
+      role: "Chief Risk Officer",
+    },
   },
 ];
-
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / 25;
-    const y = (e.clientY - rect.top - rect.height / 2) / 25;
-    setTilt({ x: -y, y: x });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-        transition: "transform 0.1s ease-out",
-      }}
-    >
-      <div className="glass-card rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300">
-        {/* Gradient Header */}
-        <div className={`h-2 bg-gradient-to-r ${project.gradient}`} />
-        
-        <div className="p-6 md:p-8">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <span className="text-xs text-primary uppercase tracking-wider font-medium">
-                {project.category}
-              </span>
-              <h3 className="font-display text-2xl font-bold mt-1 group-hover:text-primary transition-colors">
-                {project.title}
-              </h3>
-            </div>
-            <button className="p-2 rounded-lg bg-muted/50 opacity-0 group-hover:opacity-100 transition-all hover:bg-primary/20 hover:text-primary">
-              <ExternalLink className="w-4 h-4" />
-            </button>
-          </div>
-
-          <p className="text-muted-foreground mb-6">
-            {project.description}
-          </p>
-
-          {isExpanded && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="space-y-4 mb-6"
-            >
-              <div>
-                <h4 className="font-semibold text-sm mb-2">The Challenge</h4>
-                <p className="text-muted-foreground text-sm">{project.challenge}</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm mb-2">Our Solution</h4>
-                <p className="text-muted-foreground text-sm">{project.solution}</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm mb-2">Results</h4>
-                <ul className="space-y-1">
-                  {project.results.map((result) => (
-                    <li key={result} className="text-sm text-muted-foreground flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                      {result}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          )}
-
-          <div className="flex items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-              {project.tech.slice(0, isExpanded ? project.tech.length : 3).map((t) => (
-                <span
-                  key={t}
-                  className="text-xs px-2 py-1 rounded-md bg-muted/50 text-muted-foreground"
-                >
-                  {t}
-                </span>
-              ))}
-              {!isExpanded && project.tech.length > 3 && (
-                <span className="text-xs px-2 py-1 rounded-md bg-muted/50 text-muted-foreground">
-                  +{project.tech.length - 3}
-                </span>
-              )}
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-primary"
-            >
-              {isExpanded ? "Show Less" : "Learn More"}
-            </Button>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 const Projects = () => {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-neon-blue/5 via-neon-purple/5 to-neon-cyan/5" />
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+      <section className="py-24 pt-32">
+        <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
+            className="max-w-2xl"
           >
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Our <span className="gradient-text">Projects</span>
+            <p className="text-primary font-medium mb-3">Our work</p>
+            <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-6 text-foreground">
+              Stories of partnership and impact
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Explore our portfolio of innovative solutions that have transformed 
-              businesses across industries.
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Every project is a collaboration. Here are some of the stories of 
+              working alongside our clients to solve real problems and create lasting value.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Projects Grid */}
-      <section className="py-16">
+      {/* Projects List */}
+      <section className="pb-24">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-32">
             {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="space-y-12"
+              >
+                {/* Image */}
+                <div className="rounded-2xl overflow-hidden">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-[400px] md:h-[500px] object-cover"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="grid lg:grid-cols-3 gap-12">
+                  <div className="lg:col-span-2">
+                    <p className="text-primary font-medium mb-2">{project.category}</p>
+                    <h2 className="font-serif text-2xl md:text-3xl font-semibold mb-4 text-foreground">
+                      {project.title}
+                    </h2>
+                    <p className="text-muted-foreground mb-8 leading-relaxed">
+                      {project.description}
+                    </p>
+
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="font-semibold mb-2 text-foreground">The Challenge</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{project.challenge}</p>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-2 text-foreground">Our Approach</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed">{project.solution}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-8">
+                    {/* Results */}
+                    <div className="warm-card p-6">
+                      <h3 className="font-semibold mb-4 text-foreground">Results</h3>
+                      <ul className="space-y-3">
+                        {project.results.map((result) => (
+                          <li key={result} className="flex items-center gap-3 text-sm">
+                            <div className="w-2 h-2 rounded-full bg-warm-sage" />
+                            <span className="text-foreground">{result}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Testimonial */}
+                    <div className="warm-card p-6 bg-muted/50">
+                      <p className="text-foreground italic mb-4 text-sm leading-relaxed">
+                        "{project.testimonial.quote}"
+                      </p>
+                      <div>
+                        <p className="font-semibold text-sm text-foreground">{project.testimonial.author}</p>
+                        <p className="text-xs text-muted-foreground">{project.testimonial.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {index < projects.length - 1 && (
+                  <div className="border-b border-border" />
+                )}
+              </motion.div>
             ))}
           </div>
         </div>

@@ -1,121 +1,88 @@
 import { motion } from "framer-motion";
-import { Code2, Brain, FlaskConical, Cog, BarChart3, ArrowRight } from "lucide-react";
+import { Code2, Brain, FlaskConical, Cog, BarChart3, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const services = [
   {
     icon: Code2,
     title: "Software Development",
-    description: "Custom software solutions built with modern technologies and best practices.",
-    color: "neon-blue",
+    description: "Custom applications built with care, designed to grow with your business.",
+    color: "bg-primary/10 text-primary",
   },
   {
     icon: Brain,
-    title: "AI Solutions & Design",
-    description: "Intelligent systems powered by machine learning and neural networks.",
-    color: "neon-purple",
+    title: "AI Solutions",
+    description: "Intelligent systems that enhance human capabilities, not replace them.",
+    color: "bg-warm-coral/10 text-warm-coral",
   },
   {
     icon: FlaskConical,
     title: "Research & Development",
-    description: "Pioneering research to push the boundaries of what's possible.",
-    color: "neon-cyan",
+    description: "Exploring tomorrow's possibilities to solve today's challenges.",
+    color: "bg-warm-sage/10 text-warm-sage",
   },
   {
     icon: Cog,
     title: "Product Engineering",
-    description: "End-to-end product development from concept to market launch.",
-    color: "neon-blue",
+    description: "From concept to launch, we bring your product vision to life.",
+    color: "bg-warm-amber/10 text-warm-amber",
   },
   {
     icon: BarChart3,
     title: "Business Intelligence",
-    description: "Data-driven insights to transform your business decisions.",
-    color: "neon-purple",
+    description: "Data insights that tell a story and drive real decisions.",
+    color: "bg-primary/10 text-primary",
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5 },
-  },
-};
-
 export function ServicesPreview() {
   return (
-    <section className="py-24 relative">
+    <section className="py-24 bg-muted/30">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            What We <span className="gradient-text">Build</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            We offer comprehensive technology services to help businesses innovate and scale.
-          </p>
-        </motion.div>
+        <div className="max-w-2xl mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p className="text-primary font-medium mb-3">What we do</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-semibold mb-4 text-foreground">
+              Services designed around your needs
+            </h2>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              We don't just deliver projects — we partner with you to understand your goals 
+              and create solutions that make a real difference.
+            </p>
+          </motion.div>
+        </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {services.map((service) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, index) => (
             <motion.div
               key={service.title}
-              variants={itemVariants}
-              className="group"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <div className="glass-card rounded-xl p-6 h-full hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
-                <div className={`w-12 h-12 rounded-lg bg-${service.color}/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <service.icon className={`w-6 h-6 text-${service.color}`} />
+              <Link to="/services" className="block group">
+                <div className="warm-card p-6 h-full hover-lift">
+                  <div className={`w-12 h-12 rounded-xl ${service.color} flex items-center justify-center mb-4`}>
+                    <service.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                    {service.title}
+                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                  {service.title}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {service.description}
-                </p>
-              </div>
+              </Link>
             </motion.div>
           ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-12"
-        >
-          <Link
-            to="/services"
-            className="inline-flex items-center gap-2 text-primary hover:underline font-medium group"
-          >
-            Explore All Services
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
