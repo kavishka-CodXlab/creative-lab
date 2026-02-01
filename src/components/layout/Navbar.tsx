@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
@@ -15,14 +15,31 @@ const navLinks = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Change navbar style after scrolling past hero section (approx 100vh)
+      setIsScrolled(window.scrollY > window.innerHeight * 0.8);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial scroll position
+    
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-md border-b border-white/5"
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md transition-all duration-300 ${
+        isScrolled 
+          ? "bg-background/95 border-b border-border shadow-sm" 
+          : "bg-navy/95 border-b border-white/5"
+      }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-20 items-center justify-between">
@@ -32,7 +49,7 @@ export function Navbar() {
               <span className="font-display font-bold text-lg text-coral">C</span>
             </div>
             <div className="hidden sm:block">
-              <span className="font-display text-xl font-bold text-white">Creative</span>
+              <span className={`font-display text-xl font-bold transition-colors ${isScrolled ? "text-foreground" : "text-white"}`}>Creative</span>
               <span className="font-display text-xl font-bold text-coral">Lab</span>
             </div>
           </Link>
@@ -46,7 +63,9 @@ export function Navbar() {
                 className={`text-sm font-medium transition-colors relative py-2 ${
                   location.pathname === link.href
                     ? "text-coral"
-                    : "text-white/70 hover:text-white"
+                    : isScrolled 
+                      ? "text-muted-foreground hover:text-foreground" 
+                      : "text-white/70 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -73,7 +92,9 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
+            className={`md:hidden p-2 rounded-lg transition-colors ${
+              isScrolled ? "hover:bg-muted text-foreground" : "hover:bg-white/10 text-white"
+            }`}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -87,7 +108,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-navy border-b border-white/5"
+            className={`md:hidden border-b ${isScrolled ? "bg-background border-border" : "bg-navy border-white/5"}`}
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
               {navLinks.map((link) => (
@@ -98,7 +119,9 @@ export function Navbar() {
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                     location.pathname === link.href
                       ? "text-coral bg-coral/10"
-                      : "text-white/70 hover:text-white hover:bg-white/5"
+                      : isScrolled 
+                        ? "text-muted-foreground hover:text-foreground hover:bg-muted"
+                        : "text-white/70 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {link.label}
