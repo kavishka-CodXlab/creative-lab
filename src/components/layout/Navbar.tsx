@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ContactSidebar } from "./ContactSidebar";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -53,8 +54,15 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* CTA Button & Contact Sidebar */}
+          <div className="hidden md:flex items-center gap-3">
+            <ContactSidebar
+              trigger={
+                <Button variant="outline" size="icon" className="rounded-full border-coral/30 hover:bg-coral/10 hover:border-coral">
+                  <Phone className="w-4 h-4 text-coral" />
+                </Button>
+              }
+            />
             <Link to="/contact">
               <Button className="rounded-full px-6 font-semibold btn-gradient border-0 text-white hover:opacity-90">
                 Schedule a Call
