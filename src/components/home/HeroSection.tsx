@@ -63,9 +63,9 @@ export function HeroSection() {
       {/* Main content */}
       <motion.div 
         style={{ y, opacity }}
-        className="container mx-auto px-4 lg:px-8 relative z-10 pt-32 pb-20"
+        className="w-full px-4 lg:px-8 xl:px-16 relative z-10 pt-32 pb-20"
       >
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           {/* Animated Badge */}
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
@@ -191,15 +191,15 @@ export function HeroSection() {
         </div>
       </motion.div>
 
-      {/* Stats Section with glassmorphism */}
+      {/* Stats Section with glassmorphism - removed duplicate */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="relative z-10 border-t border-white/5"
+        className="relative z-10 border-t border-white/5 w-full"
       >
-        <div className="container mx-auto px-4 lg:px-8 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="w-full px-4 lg:px-8 xl:px-16 py-10">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}

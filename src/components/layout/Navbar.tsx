@@ -22,7 +22,7 @@ export function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border"
+      className="fixed top-0 left-0 right-0 z-50 bg-navy/95 backdrop-blur-md border-b border-white/5"
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-20 items-center justify-between">
@@ -32,7 +32,7 @@ export function Navbar() {
               <span className="font-display font-bold text-lg text-coral">C</span>
             </div>
             <div className="hidden sm:block">
-              <span className="font-display text-xl font-bold text-foreground">Creative</span>
+              <span className="font-display text-xl font-bold text-white">Creative</span>
               <span className="font-display text-xl font-bold text-coral">Lab</span>
             </div>
           </Link>
@@ -46,7 +46,7 @@ export function Navbar() {
                 className={`text-sm font-medium transition-colors relative py-2 ${
                   location.pathname === link.href
                     ? "text-coral"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-white/70 hover:text-white"
                 }`}
               >
                 {link.label}
@@ -73,7 +73,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -87,7 +87,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background border-b border-border"
+            className="md:hidden bg-navy border-b border-white/5"
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
               {navLinks.map((link) => (
@@ -97,8 +97,8 @@ export function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className={`px-4 py-3 rounded-lg text-sm font-medium transition-all ${
                     location.pathname === link.href
-                      ? "text-coral bg-coral/5"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "text-coral bg-coral/10"
+                      : "text-white/70 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {link.label}
