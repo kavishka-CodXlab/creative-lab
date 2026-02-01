@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
 
 const projects = [
   {
@@ -77,9 +78,9 @@ const Projects = () => {
             transition={{ duration: 0.5 }}
             className="max-w-2xl"
           >
-            <p className="text-primary font-medium mb-3">Our work</p>
-            <h1 className="font-serif text-4xl md:text-5xl font-semibold mb-6 text-foreground">
-              Stories of partnership and impact
+            <p className="text-coral font-semibold mb-3">Our portfolio</p>
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
+              Stories of <span className="gradient-text">partnership and impact</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Every project is a collaboration. Here are some of the stories of 
@@ -103,19 +104,21 @@ const Projects = () => {
                 className="space-y-12"
               >
                 {/* Image */}
-                <div className="rounded-2xl overflow-hidden">
+                <div className="rounded-2xl overflow-hidden group">
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-[400px] md:h-[500px] object-cover"
+                    className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
 
                 {/* Content */}
                 <div className="grid lg:grid-cols-3 gap-12">
                   <div className="lg:col-span-2">
-                    <p className="text-primary font-medium mb-2">{project.category}</p>
-                    <h2 className="font-serif text-2xl md:text-3xl font-semibold mb-4 text-foreground">
+                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-coral/10 text-coral mb-4">
+                      {project.category}
+                    </span>
+                    <h2 className="font-display text-2xl md:text-3xl font-bold mb-4 text-foreground">
                       {project.title}
                     </h2>
                     <p className="text-muted-foreground mb-8 leading-relaxed">
@@ -124,24 +127,24 @@ const Projects = () => {
 
                     <div className="space-y-6">
                       <div>
-                        <h3 className="font-semibold mb-2 text-foreground">The Challenge</h3>
+                        <h3 className="font-display font-bold mb-2 text-foreground">The Challenge</h3>
                         <p className="text-muted-foreground text-sm leading-relaxed">{project.challenge}</p>
                       </div>
                       <div>
-                        <h3 className="font-semibold mb-2 text-foreground">Our Approach</h3>
+                        <h3 className="font-display font-bold mb-2 text-foreground">Our Approach</h3>
                         <p className="text-muted-foreground text-sm leading-relaxed">{project.solution}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     {/* Results */}
-                    <div className="warm-card p-6">
-                      <h3 className="font-semibold mb-4 text-foreground">Results</h3>
+                    <div className="modern-card p-6">
+                      <h3 className="font-display font-bold mb-4 text-foreground">Results</h3>
                       <ul className="space-y-3">
                         {project.results.map((result) => (
                           <li key={result} className="flex items-center gap-3 text-sm">
-                            <div className="w-2 h-2 rounded-full bg-warm-sage" />
+                            <div className="w-2 h-2 rounded-full bg-coral" />
                             <span className="text-foreground">{result}</span>
                           </li>
                         ))}
@@ -149,7 +152,7 @@ const Projects = () => {
                     </div>
 
                     {/* Testimonial */}
-                    <div className="warm-card p-6 bg-muted/50">
+                    <div className="modern-card p-6 bg-secondary/50">
                       <p className="text-foreground italic mb-4 text-sm leading-relaxed">
                         "{project.testimonial.quote}"
                       </p>

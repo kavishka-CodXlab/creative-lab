@@ -131,7 +131,7 @@ export function AIChatbot() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg ${
+        className={`fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full btn-gradient text-white shadow-lg ${
           isOpen ? "hidden" : "flex"
         } items-center justify-center hover:scale-105 transition-transform`}
         whileHover={{ scale: 1.05 }}
@@ -148,29 +148,29 @@ export function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
+            className="fixed bottom-6 left-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border bg-muted/30">
+            <div className="flex items-center justify-between p-4 border-b border-border bg-primary text-white">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary-foreground" />
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-coral" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Chat with us</h3>
-                  <p className="text-xs text-muted-foreground">We typically reply instantly</p>
+                  <h3 className="font-semibold">Chat with us</h3>
+                  <p className="text-xs text-white/70">We typically reply instantly</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 rounded-lg hover:bg-muted transition-colors"
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
               >
-                <X className="w-5 h-5 text-muted-foreground" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background">
               {messages.map((message, index) => (
                 <motion.div
                   key={index}
@@ -179,14 +179,14 @@ export function AIChatbot() {
                   className={`flex gap-3 ${message.role === "user" ? "justify-end" : ""}`}
                 >
                   {message.role === "assistant" && (
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-4 h-4 text-primary-foreground" />
+                    <div className="w-8 h-8 rounded-full btn-gradient flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-4 h-4 text-white" />
                     </div>
                   )}
                   <div
                     className={`max-w-[80%] rounded-2xl px-4 py-2 ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
+                        ? "btn-gradient text-white"
                         : "bg-muted"
                     }`}
                   >
@@ -207,8 +207,8 @@ export function AIChatbot() {
               ))}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-primary-foreground" />
+                  <div className="w-8 h-8 rounded-full btn-gradient flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-white" />
                   </div>
                   <div className="bg-muted rounded-2xl px-4 py-2">
                     <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
@@ -219,7 +219,7 @@ export function AIChatbot() {
             </div>
 
             {/* Input */}
-            <form onSubmit={handleSubmit} className="p-4 border-t border-border bg-muted/30">
+            <form onSubmit={handleSubmit} className="p-4 border-t border-border bg-card">
               <div className="flex gap-2">
                 <Input
                   value={input}
@@ -232,7 +232,7 @@ export function AIChatbot() {
                   type="submit"
                   size="icon"
                   disabled={isLoading || !input.trim()}
-                  className="rounded-full"
+                  className="rounded-full btn-gradient border-0"
                 >
                   <Send className="w-4 h-4" />
                 </Button>
