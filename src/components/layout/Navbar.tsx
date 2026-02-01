@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactSidebar } from "./ContactSidebar";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -17,6 +25,8 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +39,11 @@ export function Navbar() {
     
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <motion.nav
@@ -73,7 +88,7 @@ export function Navbar() {
             ))}
           </div>
 
-          {/* CTA Button & Contact Sidebar */}
+          {/* CTA Button & Auth */}
           <div className="hidden md:flex items-center gap-3">
             <ContactSidebar
               trigger={
@@ -82,6 +97,39 @@ export function Navbar() {
                 </Button>
               }
             />
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-full">
+                    <User className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                    {user.email}
+                  </div>
+                  <DropdownMenuSeparator />
+                  {isAdmin && (
+                    <DropdownMenuItem onClick={() => navigate("/admin")}>
+                      <Shield className="w-4 h-4 mr-2" />
+                      Admin Dashboard
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/auth">
+                <Button variant="outline" className="rounded-full px-6">
+                  Sign In
+                </Button>
+              </Link>
+            )}
+            
             <Link to="/contact">
               <Button className="rounded-full px-6 font-semibold btn-gradient border-0 text-white hover:opacity-90">
                 Schedule a Call
@@ -132,6 +180,33 @@ export function Navbar() {
                   Schedule a Call
                 </Button>
               </Link>
+              
+              {user ? (
+                <>
+                  {isAdmin && (
+                    <Link to="/admin" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full rounded-full mt-2">
+                        <Shield className="w-4 h-4 mr-2" />
+                        Admin Dashboard
+                      </Button>
+                    </Link>
+                  )}
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => { handleSignOut(); setIsOpen(false); }}
+                    className="w-full rounded-full mt-2"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Link to="/auth" onClick={() => setIsOpen(false)} className="mt-2">
+                  <Button variant="outline" className="w-full rounded-full">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
