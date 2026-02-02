@@ -38,7 +38,7 @@ const services = [
 
 export function ServicesPreview() {
   return (
-    <section className="py-24 bg-background">
+    <section className="py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <motion.div
