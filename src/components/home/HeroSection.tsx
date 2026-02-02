@@ -62,7 +62,7 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-screen flex flex-col justify-between bg-navy overflow-x-hidden"
+      className="relative w-full min-h-[100dvh] md:h-screen flex flex-col bg-navy overflow-x-hidden"
     >
       {/* Gradient background layers */}
       <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-oxford via-indigo-deep/50 to-oxford" />
@@ -86,7 +86,7 @@ export function HeroSection() {
       {/* Main content */}
       <motion.div
         style={{ y, opacity }}
-        className="flex-1 flex items-center justify-center w-full px-4 sm:px-6 lg:px-8 xl:px-16 relative z-10 pt-32 md:pt-24"
+        className="flex-1 flex items-center justify-center w-full px-4 sm:px-6 lg:px-8 xl:px-16 relative z-10 pt-40 pb-12 md:pt-24 md:pb-0"
       >
         <div className="max-w-7xl mx-auto text-center">
           {/* Animated Badge */}
@@ -198,7 +198,7 @@ export function HeroSection() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="relative z-10 border-t border-white/5 w-full flex-shrink-0 mt-auto"
+        className="relative z-10 border-t border-white/5 w-full flex-shrink-0 mt-auto pb-12"
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-8 md:py-6">
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
