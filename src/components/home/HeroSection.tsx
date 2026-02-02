@@ -201,7 +201,7 @@ export function HeroSection() {
         className="relative z-10 border-t border-white/5 w-full flex-shrink-0"
       >
         <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-4 md:py-6">
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -210,10 +210,10 @@ export function HeroSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="text-center p-4 sm:p-5 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-sky/30 transition-all cursor-default group flex flex-col justify-center min-h-[100px] sm:min-h-0"
+                className="text-center p-3 sm:p-5 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-sky/30 transition-all cursor-default group flex flex-col justify-center min-h-[90px] sm:min-h-0 min-w-0 overflow-hidden"
               >
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                <p className="text-[10px] sm:text-xs md:text-sm text-white/50 font-medium mt-1 group-hover:text-white/70 transition-colors uppercase tracking-tight">
+                <p className="text-[9px] sm:text-xs md:text-sm text-white/50 font-medium mt-1 group-hover:text-white/70 transition-colors uppercase tracking-tight leading-none">
                   {stat.label}
                 </p>
               </motion.div>
