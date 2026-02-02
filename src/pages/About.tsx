@@ -27,33 +27,6 @@ const values = [
   },
 ];
 
-const team = [
-  {
-    name: "Sarah Johnson",
-    role: "Founder & CEO",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    bio: "15+ years in tech, passionate about using technology for good.",
-  },
-  {
-    name: "Michael Chen",
-    role: "Head of Engineering",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    bio: "Former Google engineer, loves building elegant solutions to complex problems.",
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "Design Director",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-    bio: "Award-winning designer focused on creating experiences people love.",
-  },
-  {
-    name: "David Kim",
-    role: "Head of AI",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    bio: "PhD in ML, believes AI should augment human capabilities, not replace them.",
-  },
-];
-
 const About = () => {
   return (
     <>
@@ -131,50 +104,6 @@ const About = () => {
                 </div>
                 <h3 className="font-display text-xl font-bold mb-2 text-foreground">{value.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{value.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team */}
-      <section className="py-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mb-16"
-          >
-            <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Our team</p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              Meet the <span className="gradient-text">creative minds</span>
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              We're a diverse team of builders, thinkers, and problem-solvers who love what we do.
-            </p>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="text-center group"
-              >
-                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6 ring-4 ring-transparent group-hover:ring-sky/20 transition-all duration-500 shadow-xl">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110"
-                  />
-                </div>
-                <h3 className="font-display font-bold text-foreground text-lg mb-1">{member.name}</h3>
-                <p className="text-star font-bold text-xs uppercase tracking-widest mb-3">{member.role}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed px-4">{member.bio}</p>
               </motion.div>
             ))}
           </div>

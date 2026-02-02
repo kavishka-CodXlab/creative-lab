@@ -71,19 +71,19 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
     {
       icon: Mail,
       title: "Email Address",
-      value: "hello@creativelab.com",
-      href: "mailto:hello@creativelab.com",
+      value: "info.creativelab@gmail.com",
+      href: "mailto:info.creativelab@gmail.com",
     },
     {
       icon: Headphones,
       title: "Phone Number",
-      value: "+94 76 330 69 68",
-      href: "tel:+94763306968",
+      value: "+94 76 234 5336",
+      href: "tel:+94762345336",
     },
     {
       icon: MapPin,
       title: "Address",
-      value: "33/9/2, Galle Road, Panadura",
+      value: "16/B Perera mawatha Rajagiriya",
       href: "#",
     },
   ];
