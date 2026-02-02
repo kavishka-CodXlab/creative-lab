@@ -94,7 +94,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-cyan-400/30 backdrop-blur-xl mb-8 group hover:bg-white/10 transition-all duration-300 shadow-[0_0_20px_rgba(0,255,255,0.15)] hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] cursor-default"
+            className="inline-flex items-center gap-2 px-4 py-1.5 sm:px-6 sm:py-2 rounded-full bg-white/5 border border-cyan-400/30 backdrop-blur-xl mb-8 group hover:bg-white/10 transition-all duration-300 shadow-[0_0_20px_rgba(0,255,255,0.15)] hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] cursor-default max-w-[min(calc(100vw-2rem),max-content)]"
           >
             <motion.div
               animate={{
@@ -102,9 +102,11 @@ export function HeroSection() {
                 opacity: [0.5, 1, 0.5]
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"
+              className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] shrink-0"
             />
-            <span className="text-sm font-semibold tracking-wider text-cyan-100/90 uppercase">Design . Develop . Deploy . Scale</span>
+            <span className="text-[10px] sm:text-sm font-semibold tracking-wider text-cyan-100/90 uppercase whitespace-nowrap">
+              Design . Develop . Deploy . Scale
+            </span>
           </motion.div>
 
           {/* Main Heading with 3D effect */}
