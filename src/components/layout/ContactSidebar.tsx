@@ -108,7 +108,7 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
         <SheetHeader className="sr-only">
           <SheetTitle>Contact Information</SheetTitle>
         </SheetHeader>
-        
+
         <div className="flex flex-col h-full py-8 px-6">
           {/* Contact Info Cards */}
           <motion.div
@@ -125,19 +125,20 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <motion.div 
-                    className="w-16 h-16 mx-auto mb-3 rounded-full border-2 border-navy/20 flex items-center justify-center group-hover:border-coral group-hover:bg-coral/5 transition-all"
-                    whileHover={{ 
+                  <motion.div
+                    className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-sky/5 border-2 border-sky/20 flex items-center justify-center group-hover:border-sky group-hover:bg-sky group-hover:shadow-lg group-hover:shadow-sky/20 transition-all duration-300"
+                    whileHover={{
                       rotate: [0, -5, 5, -5, 0],
+                      scale: 1.1,
                       transition: { duration: 0.4 }
                     }}
                   >
-                    <item.icon className="w-6 h-6 text-navy group-hover:text-coral transition-colors" />
+                    <item.icon className="w-6 h-6 text-star group-hover:text-white transition-colors" />
                   </motion.div>
-                  <h3 className="font-display text-lg font-semibold text-foreground mb-1">
+                  <h3 className="font-display text-lg font-bold text-oxford mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground group-hover:text-coral transition-colors">
+                  <p className="text-sm font-medium text-muted-foreground group-hover:text-star transition-colors">
                     {item.value}
                   </p>
                 </motion.a>
@@ -147,7 +148,7 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
                     animate={{ scaleX: isOpen ? 1 : 0 }}
                     transition={{ delay: 0.2 + index * 0.1, duration: 0.3 }}
                   >
-                    <Separator className="my-0" />
+                    <Separator className="my-0 opacity-50" />
                   </motion.div>
                 )}
               </motion.div>
@@ -155,20 +156,20 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
           </motion.div>
 
           {/* Social Links */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : 15 }}
             transition={{ delay: 0.35, duration: 0.3 }}
-            className="pt-6 border-t border-border"
+            className="pt-8 border-t border-border"
           >
-            <h4 className="font-display text-base font-semibold text-center mb-4">
+            <h4 className="font-display text-sm font-bold text-center uppercase tracking-widest text-muted-foreground mb-6">
               Stay Connected
             </h4>
-            <motion.div 
+            <motion.div
               variants={socialContainerVariants}
               initial="hidden"
               animate={isOpen ? "visible" : "hidden"}
-              className="flex justify-center gap-3"
+              className="flex justify-center gap-4"
             >
               {socialLinks.map((social) => (
                 <motion.a
@@ -176,14 +177,15 @@ export function ContactSidebar({ trigger }: ContactSidebarProps) {
                   href={social.href}
                   aria-label={social.label}
                   variants={socialItemVariants}
-                  whileHover={{ 
-                    scale: 1.1,
+                  whileHover={{
+                    scale: 1.2,
+                    y: -4,
                     transition: { duration: 0.2 }
                   }}
                   whileTap={{ scale: 0.9 }}
-                  className="w-10 h-10 rounded-full border-2 border-coral/30 flex items-center justify-center text-coral hover:border-coral hover:bg-coral hover:text-white transition-all"
+                  className="w-11 h-11 rounded-xl bg-star/5 border-2 border-star/20 flex items-center justify-center text-star hover:border-star hover:bg-star hover:text-white transition-all shadow-sm"
                 >
-                  <social.icon className="w-4 h-4" />
+                  <social.icon className="w-5 h-5" />
                 </motion.a>
               ))}
             </motion.div>

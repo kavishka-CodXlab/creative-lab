@@ -1,178 +1,247 @@
-import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
 
-const projects = [
-  {
-    id: 1,
-    title: "HealthFirst Platform",
-    category: "Healthcare",
-    description: "We partnered with a regional healthcare network to create a patient-centered platform that simplified appointment booking, health tracking, and doctor communication.",
-    challenge: "Patients were frustrated with a fragmented system — multiple apps, confusing interfaces, and no unified view of their health journey.",
-    solution: "We designed and built an intuitive mobile-first platform that brought everything together. The focus was on simplicity and accessibility for users of all ages.",
-    results: ["50,000+ active users", "4.8★ app store rating", "60% reduction in missed appointments"],
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
-    testimonial: {
-      quote: "Creative Lab didn't just build an app — they understood our patients' needs and created something they actually want to use.",
-      author: "Dr. Sarah Chen",
-      role: "Chief Digital Officer",
-    },
-  },
-  {
-    id: 2,
-    title: "RetailFlow Inventory",
-    category: "Retail & E-commerce",
-    description: "A growing retail chain was struggling with inventory management. We helped them build a system that brought clarity and control to their operations.",
-    challenge: "Stockouts were costing millions, while other products sat unsold. The team was drowning in spreadsheets with no real-time visibility.",
-    solution: "We built an intelligent inventory management system with real-time tracking, predictive restocking, and a dashboard that actually made sense to the team.",
-    results: ["40% reduction in stockouts", "$2M annual savings", "Real-time inventory visibility"],
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
-    testimonial: {
-      quote: "For the first time, our managers can see exactly what's happening across all locations. It's transformed how we operate.",
-      author: "Michael Torres",
-      role: "VP of Operations",
-    },
-  },
-  {
-    id: 3,
-    title: "EduConnect Learning",
-    category: "Education",
-    description: "We worked with an education nonprofit to bring personalized learning to underserved communities through technology.",
-    challenge: "Students in rural areas lacked access to quality education resources and personalized support.",
-    solution: "We created an adaptive learning platform that works offline, personalizes content to each student's level, and connects them with volunteer tutors.",
-    results: ["10,000+ students reached", "35% improvement in test scores", "Works in low-connectivity areas"],
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-    testimonial: {
-      quote: "Creative Lab built something that truly makes a difference. They understood our mission and delivered beyond our expectations.",
-      author: "Dr. Amara Obi",
-      role: "Executive Director",
-    },
-  },
-  {
-    id: 4,
-    title: "FinFlow Analytics",
-    category: "Financial Services",
-    description: "A financial services firm needed real-time visibility into their portfolio performance and regulatory compliance.",
-    challenge: "Reports took days to generate, compliance was manual, and leadership couldn't get timely insights for decision-making.",
-    solution: "We built a real-time analytics dashboard that processes transactions instantly, automates compliance reporting, and surfaces the insights that matter.",
-    results: ["90% faster reporting", "100% audit compliance", "Real-time risk monitoring"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-    testimonial: {
-      quote: "What used to take our team days now happens automatically. The dashboard has become essential to how we operate.",
-      author: "Jennifer Park",
-      role: "Chief Risk Officer",
-    },
-  },
-];
+import { useEffect, useState, useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2, ExternalLink, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  image_url: string;
+  challenge?: string;
+  solution?: string;
+  results?: string[];
+  testimonial_quote?: string;
+  testimonial_author?: string;
+  testimonial_role?: string;
+  project_url?: string;
+}
+
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.4 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateY,
+        rotateX,
+        transformStyle: "preserve-3d",
+      }}
+      className="group relative h-full perspective-1000 min-h-[400px]"
+    >
+      <div
+        className="h-full rounded-2xl overflow-hidden bg-white/5 border border-white/10 backdrop-blur-sm shadow-xl hover:shadow-primary/5 transition-all duration-300 flex flex-col"
+        style={{ transform: "translateZ(20px)" }}
+      >
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent z-10 opacity-80" />
+          {project.image_url.includes('/video/') || project.image_url.endsWith('.mp4') ? (
+            <video
+              src={project.image_url}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              muted
+              loop
+              playsInline
+              onMouseOver={event => (event.target as HTMLVideoElement).play()}
+              onMouseOut={event => (event.target as HTMLVideoElement).pause()}
+            />
+          ) : (
+            <img
+              src={project.image_url}
+              alt={project.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          )}
+
+          <div className="absolute top-4 left-4 z-20">
+            <span className="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase bg-black/60 backdrop-blur-md text-white border border-white/10">
+              {project.category}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-6 flex flex-col flex-grow relative z-20 -mt-12">
+          <h3 className="font-display text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
+            {project.title}
+          </h3>
+          <p className="text-sm text-muted-foreground line-clamp-3 mb-6 leading-relaxed">
+            {project.description}
+          </p>
+
+          <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
+            {project.project_url ? (
+              <a
+                href={project.project_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-primary flex items-center gap-2 hover:underline"
+              >
+                Visit Live <ExternalLink className="w-3 h-3" />
+              </a>
+            ) : (
+              <span className="text-xs font-semibold text-muted-foreground">View Case Study</span>
+            )}
+            <Link to={`/projects/${project.id}`}>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/20 hover:text-primary">
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const Projects = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (activeCategory === "All") {
+      setFilteredProjects(projects);
+    } else {
+      setFilteredProjects(projects.filter(p => p.category === activeCategory));
+    }
+  }, [activeCategory, projects]);
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProjects(data || []);
+      setFilteredProjects(data || []);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const categories = ["All", ...Array.from(new Set(projects.map(p => p.category)))];
+
   return (
-    <Layout>
-      {/* Hero Section */}
-      <section className="py-24 pt-32">
+    <>
+      <section className="py-24 pt-32 min-h-screen relative overflow-hidden">
+        {/* Ambient Background */}
+        <div className="absolute top-20 left-10 w-96 h-96 bg-primary/10 rounded-full blur-[128px] -z-10" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-sky/10 rounded-full blur-[128px] -z-10" />
+
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="max-w-2xl"
+            className="text-center max-w-3xl mx-auto mb-16"
           >
-            <p className="text-coral font-semibold mb-3">Our portfolio</p>
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
-              Stories of <span className="gradient-text">partnership and impact</span>
+            <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Our Portfolio</p>
+            <h1 className="font-display text-4xl md:text-6xl font-bold mb-6 text-foreground">
+              Selected <span className="gradient-text">Works</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Every project is a collaboration. Here are some of the stories of 
-              working alongside our clients to solve real problems and create lasting value.
+              Explore our diverse range of projects, from web applications and brand identities
+              to digital marketing campaigns.
             </p>
           </motion.div>
-        </div>
-      </section>
 
-      {/* Projects List */}
-      <section className="pb-24">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="space-y-32">
-            {projects.map((project, index) => (
+          {/* Filter Categories */}
+          {!isLoading && projects.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === category
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25 scale-105"
+                    : "bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                    }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Projects Grid */}
+          <div className="min-h-[400px]">
+            {isLoading ? (
+              <div className="flex justify-center py-20">
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
+              </div>
+            ) : filteredProjects.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground text-lg">No projects found.</p>
+              </div>
+            ) : (
               <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="space-y-12"
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                {/* Image */}
-                <div className="rounded-2xl overflow-hidden group">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="grid lg:grid-cols-3 gap-12">
-                  <div className="lg:col-span-2">
-                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-coral/10 text-coral mb-4">
-                      {project.category}
-                    </span>
-                    <h2 className="font-display text-2xl md:text-3xl font-bold mb-4 text-foreground">
-                      {project.title}
-                    </h2>
-                    <p className="text-muted-foreground mb-8 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="font-display font-bold mb-2 text-foreground">The Challenge</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">{project.challenge}</p>
-                      </div>
-                      <div>
-                        <h3 className="font-display font-bold mb-2 text-foreground">Our Approach</h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">{project.solution}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    {/* Results */}
-                    <div className="modern-card p-6">
-                      <h3 className="font-display font-bold mb-4 text-foreground">Results</h3>
-                      <ul className="space-y-3">
-                        {project.results.map((result) => (
-                          <li key={result} className="flex items-center gap-3 text-sm">
-                            <div className="w-2 h-2 rounded-full bg-coral" />
-                            <span className="text-foreground">{result}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Testimonial */}
-                    <div className="modern-card p-6 bg-secondary/50">
-                      <p className="text-foreground italic mb-4 text-sm leading-relaxed">
-                        "{project.testimonial.quote}"
-                      </p>
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">{project.testimonial.author}</p>
-                        <p className="text-xs text-muted-foreground">{project.testimonial.role}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {index < projects.length - 1 && (
-                  <div className="border-b border-border" />
-                )}
+                <AnimatePresence>
+                  {filteredProjects.map((project, index) => (
+                    <ProjectCard key={project.id} project={project} index={index} />
+                  ))}
+                </AnimatePresence>
               </motion.div>
-            ))}
+            )}
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 

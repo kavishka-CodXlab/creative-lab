@@ -75,12 +75,14 @@ export function FAQSection() {
                 <AccordionItem
                   key={index}
                   value={`left-${index}`}
-                  className="border border-border rounded-xl px-6 data-[state=open]:border-coral/30 transition-colors"
+                  className="border border-border rounded-xl px-6 data-[state=open]:border-sky/30 transition-colors"
                 >
-                  <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline py-5">
-                    {faq.question}
+                  <AccordionTrigger className="hover:no-underline py-6">
+                    <span className="text-left font-display font-bold text-foreground group-data-[state=open]:text-star transition-colors">
+                      {faq.question}
+                    </span>
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5">
+                  <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -92,18 +94,19 @@ export function FAQSection() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
+            className="space-y-4"
           >
-            <Accordion type="single" collapsible className="space-y-3">
-              {rightFaqs.map((faq, index) => (
+            <Accordion type="single" collapsible className="w-full space-y-4">
+              {faqs.slice(3).map((faq) => (
                 <AccordionItem
-                  key={index}
-                  value={`right-${index}`}
-                  className="border border-border rounded-xl px-6 data-[state=open]:border-coral/30 transition-colors"
+                  key={faq.question}
+                  value={faq.question}
+                  className="border border-border rounded-xl px-6 data-[state=open]:border-sky/30 transition-colors"
                 >
-                  <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline py-5">
+                  <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline py-6">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5">
+                  <AccordionContent className="text-muted-foreground pb-6 leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

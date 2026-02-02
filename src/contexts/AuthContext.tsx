@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   isLoading: boolean;
   isAdmin: boolean;
+  isCheckingRole: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -17,6 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isCheckingRole, setIsCheckingRole] = useState(true);
 
   useEffect(() => {
     // Set up auth state listener FIRST
@@ -28,11 +30,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         // Defer role check to avoid deadlock
         if (session?.user) {
+          setIsCheckingRole(true);
           setTimeout(() => {
             checkAdminRole(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
+          setIsCheckingRole(false);
         }
       }
     );
@@ -42,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
-      
+
       if (session?.user) {
         checkAdminRole(session.user.id);
       }
@@ -52,16 +56,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const checkAdminRole = async (userId: string) => {
+    setIsCheckingRole(true);
     const { data, error } = await supabase.rpc('has_role', {
       _user_id: userId,
       _role: 'admin'
     });
-    
+
     if (!error && data) {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
     }
+    setIsCheckingRole(false);
   };
 
   const signOut = async () => {
@@ -72,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, isAdmin, signOut }}>
+    <AuthContext.Provider value={{ user, session, isLoading, isAdmin, isCheckingRole, signOut }}>
       {children}
     </AuthContext.Provider>
   );

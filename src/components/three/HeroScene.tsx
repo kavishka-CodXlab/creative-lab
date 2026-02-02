@@ -1,139 +1,207 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Sphere, Box, Torus, MeshWobbleMaterial } from "@react-three/drei";
+import { Float, Stars, Line } from "@react-three/drei";
 import * as THREE from "three";
 
-function FloatingShape({ position, color, speed = 1, distort = 0.4, size = 1, shape = "sphere" }: { 
-  position: [number, number, number]; 
-  color: string; 
+/* =======================
+   TECH NODE
+======================= */
+function TechNode({
+  position,
+  color,
+  scale = 1,
+  speed = 1,
+}: {
+  position: [number, number, number];
+  color: string;
+  scale?: number;
   speed?: number;
-  distort?: number;
-  size?: number;
-  shape?: "sphere" | "box" | "torus";
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * speed * 0.3) * 0.2;
-      meshRef.current.rotation.y += 0.005 * speed;
-    }
+    if (!meshRef.current) return;
+    meshRef.current.rotation.x =
+      Math.sin(state.clock.elapsedTime * speed) * 0.3;
+    meshRef.current.rotation.y += 0.005 * speed;
   });
 
   return (
-    <Float speed={speed} rotationIntensity={0.5} floatIntensity={1.5}>
-      <mesh ref={meshRef} position={position}>
-        {shape === "sphere" && <sphereGeometry args={[size, 64, 64]} />}
-        {shape === "box" && <boxGeometry args={[size * 1.5, size * 1.5, size * 1.5]} />}
-        {shape === "torus" && <torusGeometry args={[size, size * 0.4, 32, 64]} />}
-        <MeshDistortMaterial
-          color={color}
-          attach="material"
-          distort={distort}
-          speed={2}
-          roughness={0.2}
-          metalness={0.8}
-        />
-      </mesh>
+    <Float speed={speed} floatIntensity={0.4} rotationIntensity={0.2}>
+      <group position={position} scale={scale}>
+        <mesh ref={meshRef}>
+          <icosahedronGeometry args={[1, 0]} />
+          <meshBasicMaterial
+            color={color}
+            wireframe
+            transparent
+            opacity={0.25}
+          />
+        </mesh>
+
+        <mesh>
+          <sphereGeometry args={[0.45, 16, 16]} />
+          <meshBasicMaterial color={color} transparent opacity={0.5} />
+        </mesh>
+      </group>
     </Float>
   );
 }
 
-function ParticleField() {
-  const particlesRef = useRef<THREE.Points>(null);
-  
-  const particles = useMemo(() => {
-    const positions = new Float32Array(200 * 3);
-    for (let i = 0; i < 200; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
-    }
-    return positions;
-  }, []);
-
-  useFrame((state) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.02;
-      particlesRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
-    }
-  });
+/* =======================
+   DATA STREAM LINES
+======================= */
+function DataStream() {
+  const lines = useMemo(
+    () =>
+      Array.from({ length: 15 }).map(() => ({
+        start: [
+          Math.random() * 20 - 10,
+          Math.random() * 20 - 10,
+          Math.random() * -15,
+        ] as [number, number, number],
+        end: [
+          Math.random() * 20 - 10,
+          Math.random() * 20 - 10,
+          Math.random() * -5,
+        ] as [number, number, number],
+        speed: Math.random() * 0.4 + 0.2,
+        offset: Math.random() * 10,
+      })),
+    []
+  );
 
   return (
-    <points ref={particlesRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={200}
-          array={particles}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        size={0.05}
-        color="#e11d48"
-        transparent
-        opacity={0.6}
-        sizeAttenuation
-      />
-    </points>
+    <>
+      {lines.map((line, i) => (
+        <AnimatedLine key={i} {...line} />
+      ))}
+    </>
   );
 }
 
-function GlowingSphere({ position, color, size }: { 
-  position: [number, number, number]; 
-  color: string;
-  size: number;
+function AnimatedLine({
+  start,
+  end,
+  speed,
+  offset,
+}: {
+  start: [number, number, number];
+  end: [number, number, number];
+  speed: number;
+  offset: number;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const ref = useRef<any>(null);
 
   useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.8) * 0.3;
-    }
+    if (!ref.current) return;
+    ref.current.material.opacity =
+      ((Math.sin(state.clock.elapsedTime * speed + offset) + 1) / 2) * 0.4;
   });
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[size, 32, 32]} />
-      <MeshWobbleMaterial
-        color={color}
-        factor={0.3}
-        speed={2}
-        transparent
-        opacity={0.7}
-      />
-    </mesh>
+    <Line
+      ref={ref}
+      points={[start, end]}
+      color="#00B4D8"
+      lineWidth={1}
+      transparent
+      opacity={0.3}
+    />
   );
 }
 
+
+/* =======================
+   NETWORK PARTICLES
+======================= */
+function NetworkParticles() {
+  const count = 200; // Reduced from 300 for better performance
+  const mesh = useRef<THREE.InstancedMesh>(null);
+
+  const particles = useMemo(() => {
+    const temp = [];
+    for (let i = 0; i < count; i++) {
+      const t = Math.random() * 100;
+      const factor = 20 + Math.random() * 100;
+      const speed = 0.01 + Math.random() / 200;
+      // FIXED: Reduced range from ±50 to ±20 to prevent overflow
+      const x = Math.random() * 40 - 20;
+      const y = Math.random() * 40 - 20;
+      const z = Math.random() * 40 - 20;
+      temp.push({ t, factor, speed, x, y, z, mx: 0, my: 0 });
+    }
+    return temp;
+  }, [count]);
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  useFrame((state) => {
+    if (!mesh.current) return;
+    particles.forEach((particle, i) => {
+      let { t, factor, speed, x, y, z } = particle;
+      t = particle.t += speed / 2;
+      const a = Math.cos(t) + Math.sin(t * 1) / 10;
+      const b = Math.sin(t) + Math.cos(t * 2) / 10;
+      const s = Math.cos(t);
+
+      // Update position
+      dummy.position.set(
+        (particle.mx / 10) * a + x + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
+        (particle.my / 10) * b + y + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
+        (particle.my / 10) * b + z + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+      );
+
+      // Update scale (pulsing)
+      dummy.scale.set(s, s, s);
+      dummy.rotation.set(s * 5, s * 5, s * 5);
+      dummy.updateMatrix();
+      mesh.current!.setMatrixAt(i, dummy.matrix);
+    });
+    mesh.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
+      <dodecahedronGeometry args={[0.05, 0]} />
+      <meshBasicMaterial color="#0077b6" transparent opacity={0.6} />
+    </instancedMesh>
+  );
+}
+
+/* =======================
+   HERO SCENE (FIXED)
+======================= */
 export function HeroScene() {
   return (
-    <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
       <Canvas
-        camera={{ position: [0, 0, 8], fov: 45 }}
+        camera={{ position: [0, 0, 15], fov: 60 }}
         gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
+        style={{ width: "100%", height: "100%" }}
       >
+        <fog attach="fog" args={["#050A18", 10, 30]} />
         <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} color="#e11d48" />
-        <pointLight position={[5, 5, 5]} intensity={0.5} color="#3b82f6" />
+        <pointLight position={[10, 10, 10]} intensity={1} color="#00B4D8" />
+        <pointLight position={[-10, -10, -10]} intensity={1.5} color="#03045E" />
 
-        {/* Main floating shapes */}
-        <FloatingShape position={[-4, 2, -2]} color="#e11d48" speed={1.2} distort={0.5} size={0.8} shape="sphere" />
-        <FloatingShape position={[4, -1.5, -3]} color="#3b82f6" speed={0.8} distort={0.3} size={0.6} shape="box" />
-        <FloatingShape position={[-3, -2, -1]} color="#8b5cf6" speed={1} distort={0.4} size={0.5} shape="torus" />
-        <FloatingShape position={[3.5, 2.5, -2]} color="#06b6d4" speed={0.9} distort={0.35} size={0.55} shape="sphere" />
-        <FloatingShape position={[-5, 0, -4]} color="#f59e0b" speed={1.1} distort={0.25} size={0.4} shape="box" />
+        <NetworkParticles />
 
-        {/* Glowing accent spheres */}
-        <GlowingSphere position={[2, 1, -1]} color="#e11d48" size={0.15} />
-        <GlowingSphere position={[-2, -1, 0]} color="#3b82f6" size={0.12} />
-        <GlowingSphere position={[0, 2.5, -2]} color="#8b5cf6" size={0.1} />
+        <Stars
+          radius={60}
+          depth={40}
+          count={2500}
+          factor={3}
+          fade
+          speed={0.5}
+        />
 
-        {/* Particle field for depth */}
-        <ParticleField />
+        <DataStream />
+
+        <TechNode position={[4, 2, -6]} color="#00B4D8" speed={0.6} />
+        <TechNode position={[-4, -3, -8]} color="#90E0EF" scale={1.4} speed={0.4} />
+        <TechNode position={[5, -4, -10]} color="#03045E" scale={1.8} speed={0.3} />
+        <TechNode position={[-3, 4, -6]} color="#0077B6" scale={0.9} speed={0.8} />
       </Canvas>
     </div>
   );

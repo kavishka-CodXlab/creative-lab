@@ -7,7 +7,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "0",
       screens: {
         "2xl": "1400px",
       },
@@ -51,14 +51,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        coral: {
-          DEFAULT: "hsl(var(--coral))",
-          light: "hsl(var(--coral-light))",
+        oxford: "hsl(var(--oxford))",
+        star: "hsl(var(--star))",
+        sky: "hsl(var(--sky))",
+        "cyan-light": "hsl(var(--cyan-light))",
+        "cyan-soft": "hsl(var(--cyan-soft))",
+        indigo: {
+          deep: "hsl(var(--indigo-deep))",
+          soft: "hsl(var(--indigo-soft))",
         },
-        navy: {
-          DEFAULT: "hsl(var(--navy))",
-          light: "hsl(var(--navy-light))",
-        },
+        amber: "hsl(var(--amber))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

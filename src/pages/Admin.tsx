@@ -1,130 +1,98 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Calendar, User, MessageSquare, Trash2, Loader2, Shield, AlertTriangle } from "lucide-react";
-import { Layout } from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { Shield, AlertTriangle, Loader2 } from "lucide-react";
 
-interface ContactSubmission {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  created_at: string;
-}
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SubmissionManager } from "@/components/admin/SubmissionManager";
+import { ProjectManager } from "@/components/admin/ProjectManager";
+import { ServiceManager } from "@/components/admin/ServiceManager";
+import { IndustryManager } from "@/components/admin/IndustryManager";
 
 const Admin = () => {
-  const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const { user, isAdmin, isLoading: authLoading } = useAuth();
+  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // If auth is done loading
     if (!authLoading) {
       if (!user) {
+        console.log("Admin: No user found, redirecting to auth");
         navigate("/auth");
-      } else if (!isAdmin) {
-        // Wait a bit for the admin check to complete
-        const timeout = setTimeout(() => {
-          if (!isAdmin) {
-            setIsLoading(false);
-          }
-        }, 1000);
-        return () => clearTimeout(timeout);
+        return;
+      }
+
+      // If we already know the user is an admin, stop loading immediately
+      if (isAdmin) {
+        console.log("Admin: Admin status confirmed");
+        setLoading(false);
       } else {
-        fetchSubmissions();
+        // Wait up to 2 seconds for the admin role check to complete
+        console.log("Admin: Waiting for role check...");
+        const timeout = setTimeout(() => {
+          console.log("Admin: Role check timeout reached");
+          setLoading(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
       }
     }
   }, [user, isAdmin, authLoading, navigate]);
 
-  const fetchSubmissions = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("contact_submissions")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setSubmissions(data || []);
-    } catch (error: any) {
-      toast({
-        title: "Error loading submissions",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    setDeletingId(id);
-    try {
-      const { error } = await supabase
-        .from("contact_submissions")
-        .delete()
-        .eq("id", id);
-
-      if (error) throw error;
-
-      setSubmissions((prev) => prev.filter((s) => s.id !== id));
-      toast({
-        title: "Submission deleted",
-        description: "The contact submission has been removed.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error deleting submission",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setDeletingId(null);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  if (authLoading || isLoading) {
+  if (authLoading || loading) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-coral" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-6 p-8 text-center">
+          <div className="relative">
+            <Loader2 className="w-16 h-16 animate-spin text-sky opacity-20" />
+            <Shield className="w-8 h-8 text-sky absolute inset-0 m-auto animate-pulse" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-display font-bold text-xl text-foreground">Verifying Access</h2>
+            {user && (
+              <p className="text-sm text-sky/60 font-medium">
+                Logged in as: <span className="text-sky">{user.email}</span>
+              </p>
+            )}
+            <p className="text-muted-foreground max-w-xs mx-auto">
+              Please wait while we secure your connection and verify your administrative privileges...
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 mt-4">
+            {!authLoading && loading && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => window.location.reload()}
+                className="text-xs text-sky/60 hover:text-sky"
+              >
+                Taking too long? Click to refresh
+              </Button>
+            )}
+            <Button
+              variant="link"
+              size="sm"
+              onClick={async () => {
+                await signOut();
+                navigate("/auth");
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground"
+            >
+              Sign out and try another account
+            </Button>
+          </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <Layout>
+      <>
         <section className="py-24 pt-32 min-h-screen">
           <div className="container mx-auto px-4 lg:px-8">
             <motion.div
@@ -139,20 +107,32 @@ const Admin = () => {
                 Access Denied
               </h1>
               <p className="text-muted-foreground mb-6">
-                You don't have permission to access this page. Only administrators can view contact submissions.
+                You don't have permission to access this page. Only administrators can view this dashboard.
               </p>
-              <Button onClick={() => navigate("/")} className="rounded-full">
-                Return Home
-              </Button>
+              <div className="flex flex-col gap-3">
+                <Button onClick={() => navigate("/")} className="rounded-full">
+                  Return Home
+                </Button>
+                <Button
+                  variant="link"
+                  onClick={async () => {
+                    await signOut();
+                    navigate("/auth");
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Sign out and try another account
+                </Button>
+              </div>
             </motion.div>
           </div>
         </section>
-      </Layout>
+      </>
     );
   }
 
   return (
-    <Layout>
+    <>
       <section className="py-24 pt-32 min-h-screen">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
@@ -161,119 +141,73 @@ const Admin = () => {
             transition={{ duration: 0.5 }}
             className="mb-8"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="icon-ring">
-                <Shield className="w-5 h-5 text-coral" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="icon-ring shrink-0">
+                  <Shield className="w-6 h-6" />
+                </div>
+                <Badge variant="outline" className="text-sky border-sky/30 bg-sky/5 font-black uppercase text-[10px] tracking-widest px-3 py-1">
+                  Security Level: Admin
+                </Badge>
               </div>
-              <Badge variant="outline" className="text-coral border-coral">
-                Admin
-              </Badge>
+
+              {/* Profile Icon with Dropdown */}
+              <div className="flex items-center gap-3">
+                <div className="hidden md:flex flex-col items-end">
+                  <p className="text-sm font-semibold text-foreground">{user?.email}</p>
+                  <p className="text-xs text-muted-foreground">Administrator</p>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky to-star flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                  {user?.email?.charAt(0).toUpperCase()}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    await signOut();
+                    navigate('/');
+                  }}
+                  className="rounded-full"
+                >
+                  Sign Out
+                </Button>
+              </div>
             </div>
-            <h1 className="font-display text-3xl md:text-4xl font-bold mb-2 text-foreground">
-              Contact Submissions
+            <h1 className="font-display text-3xl md:text-5xl font-bold mb-4 text-foreground">
+              Admin <span className="gradient-text">Dashboard</span>
             </h1>
-            <p className="text-muted-foreground">
-              Manage and review all contact form submissions.
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              Manage your projects, media, and incoming messages.
             </p>
           </motion.div>
 
-          {submissions.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-16"
-            >
-              <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-display text-xl font-semibold mb-2 text-foreground">
-                No submissions yet
-              </h3>
-              <p className="text-muted-foreground">
-                Contact form submissions will appear here.
-              </p>
-            </motion.div>
-          ) : (
-            <div className="grid gap-4">
-              {submissions.map((submission, index) => (
-                <motion.div
-                  key={submission.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                >
-                  <Card className="modern-card overflow-hidden">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
-                        <div className="space-y-1">
-                          <CardTitle className="text-lg font-semibold">
-                            {submission.subject}
-                          </CardTitle>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                            <span className="flex items-center gap-1.5">
-                              <User className="w-3.5 h-3.5" />
-                              {submission.name}
-                            </span>
-                            <a
-                              href={`mailto:${submission.email}`}
-                              className="flex items-center gap-1.5 hover:text-coral transition-colors"
-                            >
-                              <Mail className="w-3.5 h-3.5" />
-                              {submission.email}
-                            </a>
-                            <span className="flex items-center gap-1.5">
-                              <Calendar className="w-3.5 h-3.5" />
-                              {formatDate(submission.created_at)}
-                            </span>
-                          </div>
-                        </div>
+          <Tabs defaultValue="projects" className="space-y-8">
+            <TabsList>
+              <TabsTrigger value="projects">Projects</TabsTrigger>
+              <TabsTrigger value="services">Services</TabsTrigger>
+              <TabsTrigger value="industries">Industries</TabsTrigger>
+              <TabsTrigger value="messages">Messages</TabsTrigger>
+            </TabsList>
 
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="text-muted-foreground hover:text-destructive"
-                            >
-                              {deletingId === submission.id ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : (
-                                <Trash2 className="w-4 h-4" />
-                              )}
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Delete submission?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete the
-                                contact submission from {submission.name}.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(submission.id)}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-foreground whitespace-pre-wrap">
-                        {submission.message}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          )}
+            <TabsContent value="projects">
+              <ProjectManager />
+            </TabsContent>
+
+            <TabsContent value="services">
+              <ServiceManager />
+            </TabsContent>
+
+            <TabsContent value="industries">
+              <IndustryManager />
+            </TabsContent>
+
+            <TabsContent value="messages">
+              <SubmissionManager />
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 

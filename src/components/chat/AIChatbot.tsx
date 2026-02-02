@@ -4,6 +4,7 @@ import { MessageCircle, X, Send, Sparkles, User, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 type Message = {
   role: "user" | "assistant";
@@ -62,7 +63,7 @@ export function AIChatbot() {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      
+
       textBuffer += decoder.decode(value, { stream: true });
 
       let newlineIndex: number;
@@ -131,13 +132,16 @@ export function AIChatbot() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full btn-gradient text-white shadow-lg ${
-          isOpen ? "hidden" : "flex"
-        } items-center justify-center hover:scale-105 transition-transform`}
+        className={`fixed bottom-4 right-4 z-50 w-32 h-32 bg-transparent shadow-none border-none p-0 ${isOpen ? "hidden" : "flex"
+          } items-center justify-center hover:scale-105 transition-transform`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <MessageCircle className="w-6 h-6" />
+        <DotLottieReact
+          src="https://lottie.host/cb04ebd8-4f17-46bc-a9e4-6263b39c0c0e/19XLBp2dnl.lottie"
+          loop
+          autoplay
+        />
       </motion.button>
 
       {/* Chat Window */}
@@ -148,17 +152,20 @@ export function AIChatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 left-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
+            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-border bg-primary text-white">
+            <div className="flex items-center justify-between p-5 border-b border-white/10 bg-oxford text-white">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-coral" />
+                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-sky" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Chat with us</h3>
-                  <p className="text-xs text-white/70">We typically reply instantly</p>
+                  <h3 className="font-bold text-sm tracking-wide uppercase">AI Assistant</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <p className="text-[10px] text-white/60 font-medium">Online • Typical reply instant</p>
+                  </div>
                 </div>
               </div>
               <button
@@ -184,11 +191,10 @@ export function AIChatbot() {
                     </div>
                   )}
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                      message.role === "user"
-                        ? "btn-gradient text-white"
-                        : "bg-muted"
-                    }`}
+                    className={`max-w-[80%] rounded-2xl px-4 py-2 ${message.role === "user"
+                      ? "btn-gradient text-white"
+                      : "bg-muted"
+                      }`}
                   >
                     {message.role === "assistant" ? (
                       <div className="prose prose-sm max-w-none text-foreground">

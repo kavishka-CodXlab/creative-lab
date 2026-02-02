@@ -57,7 +57,7 @@ export function ServicesPreview() {
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -65,12 +65,12 @@ export function ServicesPreview() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="modern-card card-hover p-8"
+              className="modern-card card-hover p-10 group"
             >
-              <div className="icon-ring mb-6">
-                <service.icon className="w-7 h-7 text-coral" />
+              <div className="w-14 h-14 rounded-2xl bg-sky/10 flex items-center justify-center mb-8 group-hover:bg-sky group-hover:rotate-6 transition-all duration-300">
+                <service.icon className="w-7 h-7 text-sky group-hover:text-white transition-colors" />
               </div>
-              <h3 className="font-display text-xl font-bold text-foreground mb-3">
+              <h3 className="font-display text-xl font-bold text-oxford mb-4 group-hover:text-star transition-colors">
                 {service.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
@@ -88,9 +88,9 @@ export function ServicesPreview() {
           className="text-center"
         >
           <Link to="/services">
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="rounded-full px-8 border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
             >
               Explore Our Services

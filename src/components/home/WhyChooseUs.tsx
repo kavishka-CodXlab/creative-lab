@@ -36,8 +36,23 @@ const reasons = [
 
 export function WhyChooseUs() {
   return (
-    <section className="py-24 section-dark">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section className="relative w-full py-24 overflow-hidden">
+      {/* Darker, Richer Background Layers */}
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-[#0a0e27] via-[#0f1535] to-[#050816]" />
+      <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-sky/30 via-transparent to-transparent" />
+      <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-indigo-deep/40 via-transparent to-transparent" />
+
+      {/* Grid Pattern Overlay - More Visible */}
+      <div
+        className="absolute inset-0 w-full h-full opacity-[0.05]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }}
+      />
+
+      {/* Content */}
+      <div className="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -49,7 +64,7 @@ export function WhyChooseUs() {
             Why Leading Brands{" "}
             <span className="gradient-text">Choose Us</span>
           </h2>
-          <p className="text-lg text-white/60 leading-relaxed">
+          <p className="text-lg text-white/70 leading-relaxed">
             We help your business grow with proven, data-led strategies.
           </p>
         </motion.div>
@@ -63,15 +78,15 @@ export function WhyChooseUs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="bg-navy-light/50 border border-white/10 rounded-2xl p-8 hover:border-coral/30 transition-colors"
+              className="bg-white/[0.08] backdrop-blur-md border border-white/20 rounded-3xl p-8 hover:border-sky/50 transition-all hover:bg-white/[0.12] hover:shadow-2xl hover:shadow-sky/20 group"
             >
-              <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-6">
-                <reason.icon className="w-7 h-7 text-white/80" strokeWidth={1.5} />
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky/30 to-star/30 border border-sky/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-sky/40 transition-all duration-300">
+                <reason.icon className="w-7 h-7 text-sky group-hover:text-white" strokeWidth={2} />
               </div>
-              <h3 className="font-display text-xl font-bold text-white mb-3">
+              <h3 className="font-display text-xl font-bold text-white mb-3 group-hover:text-sky transition-colors">
                 {reason.title}
               </h3>
-              <p className="text-white/60 leading-relaxed">
+              <p className="text-white/70 leading-relaxed group-hover:text-white/90 transition-colors">
                 {reason.description}
               </p>
             </motion.div>

@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin, Send, CheckCircle, MessageCircle } from "lucide-re
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Layout } from "@/components/layout/Layout";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -91,7 +91,7 @@ const Contact = () => {
   };
 
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="py-24 pt-32">
         <div className="container mx-auto px-4 lg:px-8">
@@ -101,12 +101,12 @@ const Contact = () => {
             transition={{ duration: 0.5 }}
             className="max-w-2xl"
           >
-            <p className="text-coral font-semibold mb-3">Contact us</p>
+            <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Get in Touch</p>
             <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
               Let's start a <span className="gradient-text">conversation</span>
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Whether you have a project in mind or just want to explore ideas, 
+              Whether you have a project in mind or just want to explore ideas,
               we'd love to hear from you. No pressure, no hard sell — just a friendly chat.
             </p>
           </motion.div>
@@ -125,32 +125,32 @@ const Contact = () => {
               transition={{ duration: 0.5 }}
               className="lg:col-span-2"
             >
-              <h2 className="font-display text-2xl font-bold mb-8 text-foreground">Get in touch</h2>
+              <h2 className="font-display text-2xl font-bold mb-8 text-foreground">Contact Details</h2>
 
               <div className="space-y-4 mb-12">
                 {contactInfo.map((info) => (
                   <a
                     key={info.label}
                     href={info.href}
-                    className="flex items-start gap-4 p-4 rounded-xl hover:bg-secondary transition-colors group"
+                    className="flex items-start gap-4 p-5 rounded-2xl hover:bg-sky/5 transition-all group border border-transparent hover:border-sky/10"
                   >
-                    <div className="icon-ring flex-shrink-0 group-hover:border-coral/50 transition-colors">
-                      <info.icon className="w-5 h-5 text-coral" />
+                    <div className="icon-ring shrink-0 scale-90">
+                      <info.icon className="w-5 h-5" />
                     </div>
                     <div>
-                      <p className="font-semibold text-foreground">{info.value}</p>
-                      <p className="text-sm text-muted-foreground">{info.description}</p>
+                      <p className="font-bold text-foreground text-lg mb-0.5">{info.value}</p>
+                      <p className="text-sm font-medium text-muted-foreground">{info.description}</p>
                     </div>
                   </a>
                 ))}
               </div>
 
               {/* Image */}
-              <div className="rounded-2xl overflow-hidden hidden lg:block">
+              <div className="rounded-3xl overflow-hidden hidden lg:block shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop"
                   alt="Our office"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
               </div>
             </motion.div>
@@ -163,14 +163,15 @@ const Contact = () => {
               transition={{ duration: 0.5 }}
               className="lg:col-span-3"
             >
-              <div className="modern-card p-8 md:p-10">
-                <div className="flex items-center gap-3 mb-8">
+              <div className="modern-card p-10 md:p-12 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-sky/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-sky/10 transition-colors" />
+                <div className="flex items-center gap-4 mb-10 relative z-10">
                   <div className="icon-ring">
-                    <MessageCircle className="w-5 h-5 text-coral" />
+                    <MessageCircle className="w-6 h-6" />
                   </div>
                   <div>
-                    <h2 className="font-display font-bold text-foreground">Send us a message</h2>
-                    <p className="text-sm text-muted-foreground">We typically respond within a few hours</p>
+                    <h2 className="font-display text-xl font-bold text-foreground">Send us a message</h2>
+                    <p className="text-sm font-medium text-muted-foreground">We typically respond within a few hours</p>
                   </div>
                 </div>
 
@@ -279,7 +280,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 

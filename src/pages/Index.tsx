@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout/Layout";
+
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesPreview } from "@/components/home/ServicesPreview";
 import { TechStackCarousel } from "@/components/home/TechStackCarousel";
@@ -10,7 +10,7 @@ import { CTASection } from "@/components/home/CTASection";
 
 const Index = () => {
   return (
-    <Layout>
+    <div className="w-full overflow-x-hidden">
       <HeroSection />
       <ServicesPreview />
       <TechStackCarousel />
@@ -19,7 +19,7 @@ const Index = () => {
       <IndustriesSection />
       <FAQSection />
       <CTASection />
-    </Layout>
+    </div>
   );
 };
 

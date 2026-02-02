@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Heart, Users, Lightbulb, Target, ArrowRight } from "lucide-react";
-import { Layout } from "@/components/layout/Layout";
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -56,7 +56,7 @@ const team = [
 
 const About = () => {
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="py-24 pt-32">
         <div className="container mx-auto px-4 lg:px-8">
@@ -66,17 +66,17 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="text-coral font-semibold mb-3">About us</p>
+              <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Who We Are</p>
               <h1 className="font-display text-4xl md:text-5xl font-bold mb-6 text-foreground">
                 We're the people behind the <span className="gradient-text">pixels</span>
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Creative Lab started with a simple belief: technology should feel human. 
-                Too often, we saw companies frustrated by software that didn't understand 
+                Creative Lab started with a simple belief: technology should feel human.
+                Too often, we saw companies frustrated by software that didn't understand
                 their needs, built by teams that didn't listen.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                So we built something different — a team that genuinely cares about the 
+                So we built something different — a team that genuinely cares about the
                 people we work with and the problems we solve together.
               </p>
             </motion.div>
@@ -86,7 +86,7 @@ const About = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <div className="rounded-2xl overflow-hidden">
+              <div className="rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
                   alt="Our team"
@@ -99,7 +99,7 @@ const About = () => {
       </section>
 
       {/* Values */}
-      <section className="py-24 bg-secondary/30">
+      <section className="py-24 bg-sky/5">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -107,7 +107,7 @@ const About = () => {
             viewport={{ once: true }}
             className="max-w-2xl mb-16"
           >
-            <p className="text-coral font-semibold mb-3">Our values</p>
+            <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Our values</p>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-foreground">
               What we <span className="gradient-text">believe in</span>
             </h2>
@@ -116,7 +116,7 @@ const About = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -127,7 +127,7 @@ const About = () => {
                 className="modern-card card-hover p-8"
               >
                 <div className="icon-ring mb-6">
-                  <value.icon className="w-6 h-6 text-coral" />
+                  <value.icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-display text-xl font-bold mb-2 text-foreground">{value.title}</h3>
                 <p className="text-muted-foreground leading-relaxed">{value.description}</p>
@@ -146,7 +146,7 @@ const About = () => {
             viewport={{ once: true }}
             className="max-w-2xl mb-16"
           >
-            <p className="text-coral font-semibold mb-3">Our team</p>
+            <p className="text-sky font-bold text-xs uppercase tracking-widest mb-3">Our team</p>
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-4 text-foreground">
               Meet the <span className="gradient-text">creative minds</span>
             </h2>
@@ -165,16 +165,16 @@ const About = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center group"
               >
-                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 ring-4 ring-transparent group-hover:ring-coral/20 transition-all">
+                <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6 ring-4 ring-transparent group-hover:ring-sky/20 transition-all duration-500 shadow-xl">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110"
                   />
                 </div>
-                <h3 className="font-display font-bold text-foreground">{member.name}</h3>
-                <p className="text-coral text-sm mb-2">{member.role}</p>
-                <p className="text-muted-foreground text-sm">{member.bio}</p>
+                <h3 className="font-display font-bold text-foreground text-lg mb-1">{member.name}</h3>
+                <p className="text-star font-bold text-xs uppercase tracking-widest mb-3">{member.role}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed px-4">{member.bio}</p>
               </motion.div>
             ))}
           </div>
@@ -183,7 +183,7 @@ const About = () => {
 
       {/* CTA */}
       <section className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-coral via-coral-light to-navy" />
+        <div className="absolute inset-0 bg-gradient-to-br from-star via-indigo-deep to-oxford" />
         <div className="container mx-auto px-4 lg:px-8 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -194,23 +194,23 @@ const About = () => {
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-6 text-white">
               Want to work with us?
             </h2>
-            <p className="text-white/80 mb-8 leading-relaxed">
-              Whether you have a project in mind or just want to chat about ideas, 
+            <p className="text-white/80 mb-10 leading-relaxed text-lg">
+              Whether you have a project in mind or just want to chat about ideas,
               we'd love to hear from you.
             </p>
             <Link to="/contact">
-              <Button 
-                size="lg" 
-                className="rounded-full px-8 bg-white text-primary hover:bg-white/90 font-semibold"
+              <Button
+                size="lg"
+                className="rounded-full px-10 py-7 bg-white text-oxford hover:bg-white/90 font-bold shadow-2xl hover:scale-105 transition-all"
               >
                 Get in touch
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </motion.div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 

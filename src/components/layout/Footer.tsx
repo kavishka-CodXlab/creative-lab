@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Linkedin, Twitter, Mail, Facebook, Instagram, ArrowUpRight } from "lucide-react";
+import { Logo } from "./Logo";
 
 const footerLinks = {
   quickLinks: [
@@ -37,17 +38,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link to="/" className="inline-flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full border-2 border-coral flex items-center justify-center">
-                <span className="font-display font-bold text-lg text-coral">C</span>
-              </div>
-              <div>
-                <span className="font-display text-xl font-bold text-foreground">Creative</span>
-                <span className="font-display text-xl font-bold text-coral">Lab</span>
-              </div>
+            <Link to="/" className="inline-flex items-center mb-6 group">
+              <Logo className="scale-110 origin-left" />
             </Link>
             <p className="text-muted-foreground max-w-sm mb-6 leading-relaxed">
-              A premium tech consultancy that delivers highly innovative and strategic 
+              A premium tech consultancy that delivers highly innovative and strategic
               solutions to help businesses scale and thrive.
             </p>
             <div className="flex gap-3">
@@ -55,7 +50,7 @@ export function Footer() {
                 <a
                   key={social.label}
                   href={social.href}
-                  className="w-10 h-10 rounded-full border border-border hover:border-coral hover:text-coral flex items-center justify-center transition-colors"
+                  className="w-10 h-10 rounded-xl border border-border hover:border-sky hover:text-sky flex items-center justify-center transition-all hover:scale-110"
                   aria-label={social.label}
                 >
                   <social.icon className="w-4 h-4" />
@@ -106,7 +101,7 @@ export function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-muted-foreground hover:text-coral text-sm transition-colors"
+                    className="text-muted-foreground hover:text-star text-sm transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -120,14 +115,22 @@ export function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-border">
         <div className="container mx-auto px-4 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Creative Lab. All rights reserved.
-          </p>
+          <div className="flex items-center">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} Creative Lab. All rights reserved
+              <Link
+                to="/auth"
+                className="hover:text-star transition-colors cursor-default ml-[1px]"
+              >
+                .
+              </Link>
+            </p>
+          </div>
           <div className="flex gap-6">
-            <Link to="#" className="text-sm text-muted-foreground hover:text-coral transition-colors">
+            <Link to="#" className="text-sm text-muted-foreground hover:text-star transition-colors">
               Privacy Policy
             </Link>
-            <Link to="#" className="text-sm text-muted-foreground hover:text-coral transition-colors">
+            <Link to="#" className="text-sm text-muted-foreground hover:text-star transition-colors">
               Terms & Conditions
             </Link>
           </div>

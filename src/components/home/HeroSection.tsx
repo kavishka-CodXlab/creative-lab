@@ -1,28 +1,51 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue } from "framer-motion";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { HeroScene } from "@/components/three/HeroScene";
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useEffect } from "react";
 
 const stats = [
-  { value: "05+", label: "Years of Experience", suffix: "" },
-  { value: "200", label: "Projects Completed", suffix: "+" },
-  { value: "50", label: "Happy Clients", suffix: "+" },
-  { value: "20", label: "Team Members", suffix: "+" },
+  { value: "01", label: "Years of Experience", suffix: "+" },
+  { value: "15", label: "Projects Completed", suffix: "+" },
+  { value: "10", label: "Happy Clients", suffix: "+" },
+  { value: "05", label: "Team Members", suffix: "+" },
 ];
 
 function AnimatedCounter({ value, suffix }: { value: string; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, { damping: 60, stiffness: 80 });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const numericValue = parseInt(value.replace(/\D/g, ''));
+      motionValue.set(numericValue);
+    }
+  }, [isInView, value, motionValue]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      if (ref.current) {
+        // Format with leading zero if original had it (simple check for length 2 and < 10)
+        let formatted = Math.floor(latest).toString();
+        if (value.startsWith('0') && latest < 10) {
+          formatted = '0' + formatted;
+        }
+        ref.current.textContent = formatted + suffix;
+      }
+    });
+    return () => unsubscribe();
+  }, [springValue, suffix, value]);
+
   return (
-    <motion.span
-      initial={{ opacity: 0, scale: 0.5 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 100, damping: 10 }}
-      viewport={{ once: true }}
-      className="stat-number"
+    <span
+      ref={ref}
+      className="stat-number inline-block"
     >
-      {value}{suffix}
-    </motion.span>
+      0{suffix}
+    </span>
   );
 }
 
@@ -39,16 +62,16 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-navy pt-20"
+      className="relative w-full h-screen max-h-screen flex flex-col justify-between overflow-hidden bg-navy"
     >
       {/* Gradient background layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy-light/50 to-navy" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-coral/20 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent" />
-      
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-oxford via-indigo-deep/50 to-oxford" />
+      <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky/20 via-transparent to-transparent" />
+      <div className="absolute inset-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-star/10 via-transparent to-transparent" />
+
       {/* Grid pattern overlay */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
+      <div
+        className="absolute inset-0 w-full h-full opacity-[0.03]"
         style={{
           backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
           backgroundSize: '50px 50px'
@@ -61,71 +84,64 @@ export function HeroSection() {
       </Suspense>
 
       {/* Main content */}
-      <motion.div 
+      <motion.div
         style={{ y, opacity }}
-        className="w-full px-4 lg:px-8 xl:px-16 relative z-10 pt-32 pb-20"
+        className="flex-1 flex items-center justify-center w-full px-4 sm:px-6 lg:px-8 xl:px-16 relative z-10 pt-20 md:pt-24"
       >
         <div className="max-w-7xl mx-auto text-center">
           {/* Animated Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, type: "spring" }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 group hover:bg-white/10 transition-colors cursor-default"
+            transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-cyan-400/30 backdrop-blur-xl mb-8 group hover:bg-white/10 transition-all duration-300 shadow-[0_0_20px_rgba(0,255,255,0.15)] hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] cursor-default"
           >
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            >
-              <Sparkles className="w-4 h-4 text-coral" />
-            </motion.div>
-            <span className="text-sm font-medium text-white/80">Strategy • Design • Development</span>
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.5, 1, 0.5]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee]"
+            />
+            <span className="text-sm font-semibold tracking-wider text-cyan-100/90 uppercase">Design . Develop . Deploy . Scale</span>
           </motion.div>
 
-          {/* Main Heading with gradient animation */}
+          {/* Main Heading with 3D effect */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-4 text-white"
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.15] mb-6 tracking-tight"
           >
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="relative inline-block"
+            <span className="text-white/90">Empowering</span>
+            <br />
+            <span
+              className="relative inline-block mt-3 text-white/95"
+              style={{
+                textShadow: `
+                  1px 1px 0 rgba(100, 116, 139, 0.3),
+                  2px 2px 0 rgba(100, 116, 139, 0.25),
+                  3px 3px 0 rgba(100, 116, 139, 0.2),
+                  4px 4px 0 rgba(100, 116, 139, 0.15),
+                  5px 5px 0 rgba(100, 116, 139, 0.1),
+                  6px 6px 10px rgba(0, 0, 0, 0.3)
+                `
+              }}
             >
-              <span className="gradient-text bg-gradient-to-r from-coral via-pink-400 to-violet-400 bg-clip-text text-transparent">
-                Creativity Meets Intelligence
-              </span>
-              <motion.span
-                className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-coral to-violet-400 rounded-full"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              />
-            </motion.span>
+              Digital Evolution
+            </span>
           </motion.h1>
 
-          {/* Subheading */}
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="font-display text-xl sm:text-2xl md:text-3xl font-medium text-white/80 mb-6"
-          >
-            Designing intelligent software for the future.
-          </motion.h2>
 
           {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-base md:text-lg lg:text-xl text-white/60 max-w-2xl mx-auto mb-8 md:mb-10 leading-relaxed px-4"
           >
-            Premium software development, AI solutions, & performance-driven 
-            technology for ambitious businesses ready to scale.
+            We build reliable, scalable software and AI solutions that help ambitious businesses grow faster and smarter.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -133,24 +149,24 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 px-4"
           >
-            <Link to="/projects">
+            <Link to="/contact">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button 
-                  size="lg" 
-                  className="btn-gradient text-white border-0 rounded-full px-8 py-6 text-base font-semibold group hover:shadow-lg hover:shadow-coral/25 transition-all"
+                <Button
+                  size="lg"
+                  className="btn-gradient text-white border-0 rounded-full px-6 py-5 md:px-8 md:py-6 text-sm md:text-base font-semibold group hover:shadow-lg hover:shadow-sky/25 transition-all w-full sm:w-auto"
                 >
-                  View Our Work
+                  Get a Free Consultation
                   <motion.span
                     className="ml-2"
                     animate={{ x: [0, 5, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
                   >
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
                   </motion.span>
                 </Button>
               </motion.div>
@@ -160,46 +176,30 @@ export function HeroSection() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="rounded-full px-8 py-6 text-base font-semibold bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm"
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full px-6 py-5 md:px-8 md:py-6 text-sm md:text-base font-semibold bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-sm w-full sm:w-auto"
                 >
-                  <Play className="w-4 h-4 mr-2 fill-current" />
+                  <Play className="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 fill-current" />
                   Watch Showreel
                 </Button>
               </motion.div>
             </Link>
           </motion.div>
 
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
-          >
-            <span className="text-xs text-white/40 uppercase tracking-widest">Scroll</span>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-              className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2"
-            >
-              <motion.div className="w-1 h-2 bg-coral rounded-full" />
-            </motion.div>
-          </motion.div>
         </div>
       </motion.div>
 
-      {/* Stats Section with glassmorphism - removed duplicate */}
+      {/* Stats Section with glassmorphism */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="relative z-10 border-t border-white/5 w-full"
+        className="relative z-10 border-t border-white/5 w-full flex-shrink-0"
       >
-        <div className="w-full px-4 lg:px-8 xl:px-16 py-10">
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-4 md:py-6">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -208,10 +208,10 @@ export function HeroSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05, y: -5 }}
-                className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-coral/30 transition-all cursor-default group"
+                className="text-center p-3 md:p-4 rounded-xl md:rounded-2xl bg-white/5 backdrop-blur-sm border border-white/5 hover:border-sky/30 transition-all cursor-default group"
               >
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                <p className="text-sm text-white/50 font-medium mt-1 group-hover:text-white/70 transition-colors">
+                <p className="text-xs md:text-sm text-white/50 font-medium mt-0.5 md:mt-1 group-hover:text-white/70 transition-colors">
                   {stat.label}
                 </p>
               </motion.div>
@@ -219,6 +219,6 @@ export function HeroSection() {
           </div>
         </div>
       </motion.div>
-    </section>
+    </section >
   );
 }
