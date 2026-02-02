@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Sparkles, User, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,7 @@ export function AIChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi there! 👋 I'm here to help answer any questions about Creative Lab. What can I help you with today?",
+      content: "Hi there! 👋 I'm CRETO, your AI assistant. I'm here to help answer any questions about Creative Lab. What can I help you with today?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -158,10 +158,10 @@ export function AIChatbot() {
             <div className="flex items-center justify-between p-5 border-b border-white/10 bg-oxford text-white">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-sky" />
+                  <Bot className="w-5 h-5 text-sky" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm tracking-wide uppercase">AI Assistant</h3>
+                  <h3 className="font-bold text-sm tracking-wide uppercase">CRETO</h3>
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <p className="text-[10px] text-white/60 font-medium">Online • Typical reply instant</p>
@@ -187,7 +187,7 @@ export function AIChatbot() {
                 >
                   {message.role === "assistant" && (
                     <div className="w-8 h-8 rounded-full btn-gradient flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-4 h-4 text-white" />
+                      <Bot className="w-4 h-4 text-white" />
                     </div>
                   )}
                   <div
@@ -214,7 +214,7 @@ export function AIChatbot() {
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-3">
                   <div className="w-8 h-8 rounded-full btn-gradient flex items-center justify-center">
-                    <Sparkles className="w-4 h-4 text-white" />
+                    <Bot className="w-4 h-4 text-white" />
                   </div>
                   <div className="bg-muted rounded-2xl px-4 py-2">
                     <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
