@@ -1,73 +1,79 @@
-# Welcome to your Lovable project
+# Creative Lab Nexus
 
-## Project info
+Creative Lab Nexus is a premium, high-impact digital platform built for a modern tech consultancy. It combines cutting-edge aesthetics with robust functionality, featuring 3D interactive elements, smooth animations, and a secure administrative backend.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Key Features
 
-## How can I edit this code?
+- **Immersive 3D Hero Section**: Built with React Three Fiber and Three.js for a stunning first impression.
+- **Premium UI/UX**: Crafted with Tailwind CSS and Framer Motion for fluid transitions and micro-interactions.
+- **Responsive Navigation**: A dynamic, glassmorphic navbar that adapts to scroll position and page context.
+- **Admin Dashboard**: A secure, private management portal to handle projects, services, and incoming messages.
+- **AI Chatbot Integration**: Personalized AI assistance for visitors.
+- **Contact System**: Seamless integration with Supabase for reliable lead capture and management.
+- **Modern Tech Stack Carousel**: An interactive showcase of the agency's primary specialized technologies.
 
-There are several ways of editing your application.
+## 🛠 Tech Stack
 
-**Use Lovable**
+- **Frontend**: [React](https://reactjs.org/) + [Vite](https://vitejs.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Shadcn UI](https://ui.shadcn.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **3D Graphics**: [Three.js](https://threejs.org/) & [React Three Fiber](https://docs.pmnd.rs/react-three-fiber)
+- **Backend & Auth**: [Supabase](https://supabase.com/)
+- **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 🏁 Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js (v18.0.0 or higher)
+- npm or yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd creative-lab-nexus
+   ```
 
-Follow these steps:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Configure Environment Variables:
+   Create a `.env` file in the root directory and add your Supabase credentials:
+   ```env
+   VITE_SUPABASE_URL=your-supabase-url
+   VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-key
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠 Scripts
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- `npm run dev`: Starts the development server.
+- `npm run build`: Generates the production build.
+- `npm run lint`: Runs ESLint to check for code quality.
+- `npm run preview`: Previews the production build locally.
+- `npm run test`: Executes the test suite using Vitest.
 
-**Edit a file directly in GitHub**
+## 🕵️‍♂️ Admin Access
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+For security and aesthetics, the admin login link is hidden from public view. 
 
-**Use GitHub Codespaces**
+To access the Admin Portal:
+1. Scroll to the footer of the website.
+2. Click on the very last **dot (period)** in the copyright text: *"© 2026 Creative Lab. All rights reserved."*
+3. Enter your administrator credentials.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📄 License
 
-## What technologies are used for this project?
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built with precision by the **Creative Lab Team**.
