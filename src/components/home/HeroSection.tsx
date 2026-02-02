@@ -62,7 +62,7 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-screen max-h-screen flex flex-col justify-between overflow-hidden bg-navy"
+      className="relative w-full min-h-screen flex flex-col justify-between bg-navy overflow-x-hidden"
     >
       {/* Gradient background layers */}
       <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-oxford via-indigo-deep/50 to-oxford" />
@@ -198,9 +198,9 @@ export function HeroSection() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="relative z-10 border-t border-white/5 w-full flex-shrink-0"
+        className="relative z-10 border-t border-white/5 w-full flex-shrink-0 mt-auto"
       >
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-4 md:py-6">
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-8 md:py-6">
           <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {stats.map((stat, index) => (
               <motion.div
