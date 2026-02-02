@@ -86,7 +86,7 @@ export function HeroSection() {
       {/* Main content */}
       <motion.div
         style={{ y, opacity }}
-        className="flex-1 flex items-center justify-center w-full px-4 sm:px-6 lg:px-8 xl:px-16 relative z-10 pt-20 md:pt-24"
+        className="flex-1 flex items-center justify-center w-full px-4 sm:px-6 lg:px-8 xl:px-16 relative z-10 pt-32 md:pt-24"
       >
         <div className="max-w-7xl mx-auto text-center">
           {/* Animated Badge */}
